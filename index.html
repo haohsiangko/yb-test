@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if(data.img2) {
                 // 假设图片URL是相对的，您可能需要调整路径。
-                var imageUrl = '/data_clean/2024-02-19/' + data.img2; // 根据您的图片目录更新路径
+                var imageUrl = 'https://haohsiangko.github.io/yb-test/data_clean/2024-02-19/' + data.img2; // 根据您的图片目录更新路径
                 circleMarker.bindPopup("<img src='" + imageUrl + "' style='width:800px;'>" +
                  "<p><b>低水位率：</b>"+ data.r_low +"</p>" +
                  "<p><b>高水位率：</b>"+ data.r_high +"</p>" +
