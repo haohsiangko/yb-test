@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV to Map Markers</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <style>
+        #mapid { height: 1080px; }
+    </style>
+</head>
+<body>
+    <!-- <input type="file" id="csvFileInput" accept=".csv"> -->
+    <div id="mapid"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    
+    <!-- <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script> -->
+    <script src="/PapaParse-5.0.2/papaparse.min.js"></script>
+    <script>
+        var mymap = L.map('mapid').setView([25.0330, 121.5654], 13);
+
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(mymap);
+
+//         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+//     attribution: 'Map tiles by Carto, under CC BY 3.0. Data by OpenStreetMap, under ODbL.',
+//     maxZoom: 19
+// }).addTo(mymap);
+
+
+        // document.getElementById('csvFileInput').addEventListener('change', function(event) {
+        //     parseCSV(event.target.files[0]);
+        // });
+
+        // function parseCSV(file) {
+        //     Papa.parse(file, {
+        //         complete: function(results) {
+        //             console.log(results);
+        //             results.data.forEach(function(row) {
+        //                 addMarker(row);
+        //             });
+        //         },
+        //         header: true
+        //     });
+        // }
+
+        var csvUrl = 'test.csv';
+
+// 網頁加載完成後自動執行
+document.addEventListener('DOMContentLoaded', function() {
+    fetch(csvUrl)
+    .then(response => response.text())
+    .then(csvText => {
+        // 使用PapaParse解析CSV文本
+        Papa.parse(csvText, {
+            header: true,
+            complete: function(results) {
+                results.data.forEach(function(row) {
+                    addMarker(row);
+                });
+            }
+        });
+    })
+    .catch(error => console.error('Error loading the CSV file:', error));
+});
+
+
+        function getColorByValue(value,status) {
+            if (status==2){
+                return '#fff';
+            }
+            
+            else{
+                return value > 80 ? '#800026' :
+                    value > 60 ? '#EA7500' :
+                    value > 40 ? '#3CB371' :
+                    value > 20 ? '#0080FF' :
+                                    '#0000E3'; // 根据需要调整这些阈值和颜色
+}
+
+            }
+            
+
+
+        function addMarker(data) {
+        if(data.lat && data.lng) {
+            var fillColor = getColorByValue(data.r_low,data.status); // 使用getColorByValue函数根据r_low字段值获取颜色
+            
+            var circleMarker = L.circleMarker([data.lat, data.lng], {
+                color: 'gray',// 圆点边缘的颜色，固定或也可以动态设置
+                opacity: 0.5,      
+                weight: 0.5,
+                fillColor: fillColor, // 圆点内部的填充颜色，根据r_low值动态决定
+                fillOpacity: 0.7,  // 圆点填充的透明度
+                radius: 5          // 圆点的半径
+            }).addTo(mymap);
+            
+            if(data.img2) {
+                // 假设图片URL是相对的，您可能需要调整路径。
+                var imageUrl = '/data_clean/2024-02-19/' + data.img2; // 根据您的图片目录更新路径
+                circleMarker.bindPopup("<img src='" + imageUrl + "' style='width:800px;'>" +
+                 "<p><b>低水位率：</b>"+ data.r_low +"</p>" +
+                 "<p><b>高水位率：</b>"+ data.r_high +"</p>" +
+                 "<p><b>見車率：</b>"+ data.r_bike_T +"</p>" +
+                 "<p><b>見柱率：</b>"+ data.r_stop_T +"</p>" 
+                 );
+            }
+        }
+    }
+    </script>
+</body>
+</html>
