@@ -7,10 +7,64 @@
     <style>
         #mapid { height: 1080px; }
     </style>
+    <style>
+        .legend {
+          display: flex;
+          flex-direction: column;
+        }
+        .legend-item {
+          display: flex;
+          align-items: center;
+          margin-bottom: 5px;
+        }
+        .color-box {
+          width: 20px;
+          height: 20px;
+          margin-right: 10px;
+        }
+        .color1 { background-color: '#800026'; }
+        .color2 { background-color: '#EA7500'; }
+        .color3 { background-color: '#3CB371'; }
+        .color4 { background-color: '#0080FF'; }
+        .color5 { background-color: '#0000E3'; }
+        .color6 { background-color: '#eee'; }
+
+      </style>
+
+
 </head>
 <body>
+<p>低水位率（一天有多少時間比例，可借的車輛數，在全部車柱的20%以下）</p>
+    <div class="legend">
+        <div class="legend-item">
+          <div class="color-box color1"></div>
+          <label>80%以上（愈不好借）</label>
+        </div>
+        <div class="legend-item">
+          <div class="color-box color2"></div>
+          <label>60%~80%</label>
+        </div>
+        <div class="legend-item">
+          <div class="color-box color3"></div>
+          <label>40%~60%</label>
+        </div>
+        <div class="legend-item">
+          <div class="color-box color4"></div>
+          <label>20%~40%</label>
+        </div>
+        <div class="legend-item">
+          <div class="color-box color5"></div>
+          <label>20%以下（愈好借）</label>
+        </div>
+        <div class="legend-item">
+            <div class="color-box color6"></div>
+            <label>站點有狀況</label>
+          </div>
+      </div>
     <!-- <input type="file" id="csvFileInput" accept=".csv"> -->
     <div id="mapid"></div>
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
     
     <!-- <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script> -->
@@ -71,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         function getColorByValue(value,status) {
             if (status==2){
-                return '#fff';
+                return '#eee';
             }
             
             else{
