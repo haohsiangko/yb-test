@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV to Map Markers</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <style>
+        #mapid { height: 1080px; }
+    </style>
+    <style>
+        .legend {
+          display: flex;
+          flex-direction: column;
+        }
+        .legend-item {
+          display: flex;
+          align-items: center;
+          margin-bottom: 5px;
+        }
+        .color-box {
+          width: 20px;
+          height: 20px;
+          margin-right: 10px;
+        }
+        .color1 { background-color: #0000E3; }
+        .color2 { background-color: #0080FF; }
+        .color3 { background-color: #3CB371; }
+        .color4 { background-color: #EA7500; }
+        .color5 { background-color: #800026; }
+        .color6 { background-color: #FF60AF; }
+        .color7 { background-color: #eee; }
+
+
+
+
+      </style>
+
+
+</head>
+<body>
+
+
+<button id="playButton">Play</button>
+<button id="stopButton">Stop</button>
+<div id="timeIndexDisplay">Current Time</div>
+
+
+<p>水位率（可借車輛/可使用車柱）</p>
+    <div class="legend">
+        <div class="legend-item">
+          <div class="color-box color1"></div>
+          <label>80%以上（愈好借）</label>
+        </div>
+        <div class="legend-item">
+          <div class="color-box color2"></div>
+          <label>60%~80%</label>
+        </div>
+        <div class="legend-item">
+          <div class="color-box color3"></div>
+          <label>40%~60%</label>
+        </div>
+        <div class="legend-item">
+          <div class="color-box color4"></div>
+          <label>20%~40%</label>
+        </div>
+        <div class="legend-item">
+          <div class="color-box color5"></div>
+          <label>20%以下</label>
+        </div>
+        <div class="legend-item">
+            <div class="color-box color6"></div>
+            <label>0%（愈難借）</label>
+          </div>
+        <div class="legend-item">
+            <div class="color-box color7"></div>
+            <label>站點有狀況</label>
+          </div>
+      </div>
+    <!-- <input type="file" id="csvFileInput" accept=".csv"> -->
+    <div id="mapid"></div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    
+    <!-- <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script> -->
+    <!-- <script src="/PapaParse-5.0.2/papaparse.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    
+    <script>
+        var mymap = L.map('mapid').setView([25.0330, 121.5654], 13);
+
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(mymap);
+
+//         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+//     attribution: 'Map tiles by Carto, under CC BY 3.0. Data by OpenStreetMap, under ODbL.',
+//     maxZoom: 19
+// }).addTo(mymap);
+
+
+        // document.getElementById('csvFileInput').addEventListener('change', function(event) {
+        //     parseCSV(event.target.files[0]);
+        // });
+
+        // function parseCSV(file) {
+        //     Papa.parse(file, {
+        //         complete: function(results) {
+        //             console.log(results);
+        //             results.data.forEach(function(row) {
+        //                 addMarker(row);
+        //             });
+        //         },
+        //         header: true
+        //     });
+        // }
+
+        var csvUrl = '0305_10_min.csv';
+
+// // 網頁加載完成後自動執行
+// document.addEventListener('DOMContentLoaded', function() {
+//     fetch(csvUrl)
+//     .then(response => response.text())
+//     .then(csvText => {
+//         // 使用PapaParse解析CSV文本
+//         Papa.parse(csvText, {
+//             header: true,
+//             complete: function(results) {
+//                 results.data.forEach(function(row) {
+//                     addMarker(row);
+//                 });
+//             }
+//         });
+//     })
+//     .catch(error => console.error('Error loading the CSV file:', error));
+// });
+
+Papa.parse(csvUrl, {
+    download: true, // 表示我們需要下載檔案
+    header: true, // 將第一行視為標題，自動轉換為物件鍵
+    complete: function(results) {
+        // 解析完成後的回調函數，results 是包含解析結果的物件
+        // console.log(results);
+        // 假設我們想將這個解析後的資料存儲在一個變量中
+        var data = results.data;
+        // 現在 'data' 變量中存倲的是一個物件陣列，每個物件代表 CSV 中的一行
+        // console.log(data);
+
+
+var currentTimeIndex = 0;
+
+var markers = {};
+
+// 函數：根據數據繪製點
+function drawPointsForTime(timeIndex) {
+
+    // // 清除先前的點
+    // mymap.eachLayer(function (layer) {
+    //     if (layer instanceof L.CircleMarker) {
+    //         mymap.removeLayer(layer);
+    //         console.log("clean!")
+    //     }
+    // });
+
+    // 獲取當前時間點的數據
+    // var points = data[timeIndex]
+    // console.log(data)
+    const filter_data = data.filter(item => item.time_index == timeIndex);
+    // console.log(filter_data);
+    // console.log(timeIndex)
+
+    if(timeIndex == 0){
+        // 繪製點
+    filter_data.forEach(function(point,index) {
+        var fillColor = getColorByValue(point.level, point.status); 
+
+        var marker = L.circleMarker([point.lat, point.lng], {
+            color: 'gray',// 圆点边缘的颜色，固定或也可以动态设置
+                opacity: 0.5,      
+                weight: 0.5,
+                fillColor: fillColor, // 圆点内部的填充颜色，根据r_low值动态决定
+                fillOpacity: 0.7,  // 圆点填充的透明度
+                radius: 5          // 圆点的半径
+    }).addTo(mymap);
+
+        var key = point.station_no; // 假设每个点都有一个唯一的ID作为标识符
+
+        markers[key] = marker;
+
+        // console.log(markers)
+    // 更新时间指标显示
+    document.getElementById('timeIndexDisplay').innerText = point.time_every_min;
+
+
+    
+    // 假设图片URL是相对的，您可能需要调整路径。
+    // var imageUrl = 'https://haohsiangko.github.io/yb-test/data_clean/2024-02-19/' + point.img2; // 根据您的图片目录更新路径
+    marker.bindPopup(//"<img src='" + imageUrl + "' style='width:800px;'>" +
+        "<p><b>站點編號：</b>"+ point.station_no +"</p>" +
+        "<p><b>站點名稱：</b>"+ point.name_tw +"</p>" +
+        "<p><b>水位率：</b>"+ point.level +"</p>" +
+        "<p><b>可借車輛數：</b>"+ point.available_spaces +"</p>" +
+        "<p><b>可停車柱數：</b>"+ point.empty_spaces +"</p>" +
+        "<p><b>時間：</b>"+ point.time_every_min +"</p>" 
+        );
+        
+
+    });
+
+    
+
+}else{
+    filter_data.forEach(function(point,index) {
+        var fillColor = getColorByValue(point.level, point.status); 
+
+        var marker = markers[point.station_no];
+        marker.setStyle({
+            fillColor: fillColor
+        });
+
+        // 更新时间指标显示
+    document.getElementById('timeIndexDisplay').innerText = point.time_every_min;
+
+    marker.bindPopup(//"<img src='" + imageUrl + "' style='width:800px;'>" +
+        "<p><b>站點編號：</b>"+ point.station_no +"</p>" +
+        "<p><b>站點名稱：</b>"+ point.name_tw +"</p>" +
+        "<p><b>水位率：</b>"+ point.level +"</p>" +
+        "<p><b>可借車輛數：</b>"+ point.available_spaces +"</p>" +
+        "<p><b>可停車柱數：</b>"+ point.empty_spaces +"</p>" +
+        "<p><b>時間：</b>"+ point.time_every_min +"</p>" 
+        );
+
+    });
+
+
+
+
+
+};
+
+
+
+
+}
+
+
+// 初始化一个变量来存储 setInterval 的引用
+var autoPlayInterval = null;
+
+// 函数：开始自动播放
+function startAutoPlay() {
+    // 避免重复启动
+    if (autoPlayInterval !== null) return;
+
+    autoPlayInterval = setInterval(function() {
+        drawPointsForTime(currentTimeIndex);
+        // console.log(currentTimeIndex)
+
+        currentTimeIndex = (currentTimeIndex + 5) % data.length;
+    }, 1000); // 1000毫秒=1秒
+}
+
+// 函数：停止自动播放
+function stopAutoPlay() {
+    if (autoPlayInterval !== null) {
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = null;
+    }
+}
+
+// 修改播放按钮事件处理，以开始自动播放
+document.getElementById('playButton').onclick = function() {
+    startAutoPlay();
+};
+
+// 为停止按钮添加事件处理，以停止自动播放
+document.getElementById('stopButton').onclick = function() {
+    stopAutoPlay();
+};
+
+
+
+
+
+
+    }
+});
+
+
+
+function getColorByValue(value,status) {
+    if (status==2){
+        return '#eee';
+    }
+    else{
+        return value > 0.8 ?  '#0000E3':
+        value > 0.6 ?  '#0080FF':
+        value > 0.4 ? '#3CB371' :
+        value > 0.2 ? '#EA7500' :
+        value > 0 ? '#800026' :
+        '#FF60AF'; // 根据需要调整这些阈值和颜色
+
+    }
+
+}
+
+
+
+
+//         function addMarker(data) {
+//         if(data.lat && data.lng) {
+//             var fillColor = getColorByValue(data.level,data.status); // 使用getColorByValue函数根据r_low字段值获取颜色
+            
+//             var circleMarker = L.circleMarker([data.lat, data.lng], {
+//                 color: 'gray',// 圆点边缘的颜色，固定或也可以动态设置
+//                 opacity: 0.5,      
+//                 weight: 0.5,
+//                 fillColor: fillColor, // 圆点内部的填充颜色，根据r_low值动态决定
+//                 fillOpacity: 0.7,  // 圆点填充的透明度
+//                 radius: 5          // 圆点的半径
+//             }).addTo(mymap);
+            
+//             if(data.img2) {
+//                 // 假设图片URL是相对的，您可能需要调整路径。
+//                 var imageUrl = 'https://haohsiangko.github.io/yb-test/data_clean/2024-02-19/' + data.img2; // 根据您的图片目录更新路径
+//                 circleMarker.bindPopup("<img src='" + imageUrl + "' style='width:800px;'>" +
+//                  "<p><b>低水位率：</b>"+ data.r_low +"</p>" +
+//                  "<p><b>高水位率：</b>"+ data.r_high +"</p>" +
+//                  "<p><b>見車率：</b>"+ data.r_bike_T +"</p>" +
+//                  "<p><b>見柱率：</b>"+ data.r_stop_T +"</p>" 
+//                  );
+//             }
+//         }
+//     }
+    </script>
+
+    
+</body>
+</html>
