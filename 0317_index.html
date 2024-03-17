@@ -48,6 +48,14 @@
 <p>水位率（可借車輛/可使用車柱）</p>
     <div class="legend">
         <div class="legend-item">
+            <div class="color-box color1"></div>
+            <label>有車(2台以上)</label>
+          </div>
+          <div class="legend-item">
+            <div class="color-box color5"></div>
+            <label>僅1台車</label>
+          </div>
+        <!-- <div class="legend-item">
           <div class="color-box color1"></div>
           <label>80%以上（愈好借）</label>
         </div>
@@ -66,7 +74,7 @@
         <div class="legend-item">
           <div class="color-box color5"></div>
           <label>20%以下</label>
-        </div>
+        </div> -->
         <div class="legend-item">
             <div class="color-box color6"></div>
             <label>0%（愈難借）</label>
@@ -174,7 +182,7 @@ function drawPointsForTime(timeIndex) {
     if(timeIndex == 0){
         // 繪製點
     filter_data.forEach(function(point,index) {
-        var fillColor = getColorByValue(point.level, point.status); 
+        var fillColor = getColorByValue(point.level, point.status, point.available_spaces); 
 
         var marker = L.circleMarker([point.lat, point.lng], {
             color: 'gray',// 圆点边缘的颜色，固定或也可以动态设置
@@ -213,7 +221,7 @@ function drawPointsForTime(timeIndex) {
 
 }else{
     filter_data.forEach(function(point,index) {
-        var fillColor = getColorByValue(point.level, point.status); 
+        var fillColor = getColorByValue(point.level, point.status, point.available_spaces); 
 
         var marker = markers[point.station_no];
         marker.setStyle({
@@ -290,17 +298,27 @@ document.getElementById('stopButton').onclick = function() {
 
 
 
-function getColorByValue(value,status) {
+function getColorByValue(value,status,available_spaces) {
     if (status==2){
         return '#eee';
     }
+    else if(available_spaces==1){
+        return '#800026';
+    }
     else{
-        return value > 0.8 ?  '#0000E3':
-        value > 0.6 ?  '#0080FF':
-        value > 0.4 ? '#3CB371' :
-        value > 0.2 ? '#EA7500' :
-        value > 0 ? '#800026' :
-        '#FF60AF'; // 根据需要调整这些阈值和颜色
+        if(value>0){
+            return '#0000E3';
+        }
+        else{
+            return '#FF60AF';
+        }
+        // return 
+        // value > 0.8 ?  '#0000E3':
+        // value > 0.6 ?  '#0080FF':
+        // value > 0.4 ? '#3CB371' :
+        // value > 0.2 ? '#EA7500' :
+        // value > 0 ? '#800026' :
+        // '#FF60AF'; // 根据需要调整这些阈值和颜色
 
     }
 
