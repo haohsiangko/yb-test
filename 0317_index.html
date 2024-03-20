@@ -5,7 +5,11 @@
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
     <style>
-        #mapid { height: 1080px; }
+        #mapid { 
+            position: relative;
+            z-index: 1
+        }
+        
     </style>
     <style>
         .legend {
@@ -30,6 +34,40 @@
         .color6 { background-color: #FF60AF; }
         .color7 { background-color: #eee; }
 
+        #timeIndexDisplay {
+        position: absolute;
+        top: 20px; /* 根據需要調整 */
+        right: 20px; /* 根據需要調整 */
+        z-index: 1000;
+        color: white; /* 文字顏色 */
+        background-color: rgba(0, 0, 0, 0.5); /* 背景顏色，帶透明度 */
+        padding: 5px; /* 內邊距 */
+        border-radius: 5px; /* 邊角圓滑 */
+        }
+
+        #countDisplay {
+        position: absolute;
+        top: 60px; /* 根據需要調整 */
+        right: 20px; /* 根據需要調整 */
+        z-index: 1000;
+        color: white; /* 文字顏色 */
+        background-color: rgba(0, 0, 0, 0.5); /* 背景顏色，帶透明度 */
+        padding: 5px; /* 內邊距 */
+        border-radius: 5px; /* 邊角圓滑 */
+        }
+
+        #finishDisplay {
+        position: absolute;
+        top: 100px; /* 根據需要調整 */
+        right: 20px; /* 根據需要調整 */
+        z-index: 1000;
+        color: white; /* 文字顏色 */
+        background-color: rgba(0, 0, 0, 0.5); /* 背景顏色，帶透明度 */
+        padding: 5px; /* 內邊距 */
+        border-radius: 5px; /* 邊角圓滑 */
+        }
+        
+
 
 
 
@@ -39,10 +77,11 @@
 </head>
 <body>
 
-
 <button id="playButton">Play</button>
 <button id="stopButton">Stop</button>
-<div id="timeIndexDisplay">Current Time</div>
+<!-- <input type="range" min="0" max="144" value="0" class="slider" id="timeSlider" oninput="updateTime(this.value)"> -->
+
+
 
 
 <p>水位率（可借車輛/可使用車柱）</p>
@@ -85,8 +124,17 @@
           </div>
       </div>
     <!-- <input type="file" id="csvFileInput" accept=".csv"> -->
-    <div id="mapid"></div>
+    
+    <div id="map-container" style="position: relative; height: 1080px;">
+        <div id="mapid" style="height: 100%;"></div>
+        <p id="timeIndexDisplay">Current Time</p>
+        <p id="countDisplay">可借狀況</p>
+        <p id="finishDisplay">可還狀況</p>
+      </div>
 
+
+
+    
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
     
@@ -176,6 +224,16 @@ function drawPointsForTime(timeIndex) {
     // var points = data[timeIndex]
     // console.log(data)
     const filter_data = data.filter(item => item.time_index == timeIndex);
+    const count_zero = filter_data.filter(item => item.available_spaces == 0).length;
+    const count_one = filter_data.filter(item => item.available_spaces == 1).length;
+    const count_above_2 = filter_data.filter(item => item.available_spaces >= 2).length;
+    const count_full = filter_data.filter(item => item.empty_spaces == 0).length;
+    const count_almost_full = filter_data.filter(item => item.empty_spaces == 1).length;
+    const count_can_park = filter_data.filter(item => item.empty_spaces >= 2).length;
+
+
+    // console.log(count_zero, count_one, count_above_2);
+
     // console.log(filter_data);
     // console.log(timeIndex)
 
@@ -200,6 +258,8 @@ function drawPointsForTime(timeIndex) {
         // console.log(markers)
     // 更新时间指标显示
     document.getElementById('timeIndexDisplay').innerText = point.time_every_min;
+    document.getElementById('countDisplay').innerText = "無車站點數:" + count_zero +"  僅1車站數:" +count_one +"  2車以上站數:"+count_above_2;
+    document.getElementById('finishDisplay').innerText = "無柱站點數:" + count_full +"  剩1柱站數:" +count_almost_full +"  2柱以上站數:"+count_can_park;
 
 
     
@@ -230,6 +290,8 @@ function drawPointsForTime(timeIndex) {
 
         // 更新时间指标显示
     document.getElementById('timeIndexDisplay').innerText = point.time_every_min;
+    document.getElementById('countDisplay').innerText = "無車站點數:" + count_zero +"  僅1車站數:" +count_one +"  2車以上站數:"+count_above_2;
+    document.getElementById('finishDisplay').innerText = "無柱站點數:" + count_full +"  剩1柱站數:" +count_almost_full +"  2柱以上站數:"+count_can_park;
 
     marker.bindPopup(//"<img src='" + imageUrl + "' style='width:800px;'>" +
         "<p><b>站點編號：</b>"+ point.station_no +"</p>" +
@@ -266,7 +328,7 @@ function startAutoPlay() {
         drawPointsForTime(currentTimeIndex);
         // console.log(currentTimeIndex)
 
-        currentTimeIndex = (currentTimeIndex + 5) % data.length;
+        currentTimeIndex = (currentTimeIndex + 10) % data.length;
     }, 1000); // 1000毫秒=1秒
 }
 
@@ -352,6 +414,33 @@ function getColorByValue(value,status,available_spaces) {
 //             }
 //         }
 //     }
+
+// fetch('mrt.geojson')
+//     .then(function(response) {
+//         return response.json();
+//     })
+//     .then(function(data) {
+//         console.log(data);
+//         L.geoJSON(data,{
+//             style: function(f) {
+//                 console.log(f);
+//                 // 根据feature的某个属性设置样式
+//                 switch (f.features.properties.RouteName) {
+                    
+//                     case '淡水線': return {color: "red"};
+//                     case 'Type2': return {color: "#0000ff"};
+//                     // 添加更多的case以处理不同的类型
+//                     default: return {color: "#000"}; // 默认样式
+//                 }
+//             }
+
+//         }).addTo(map);
+//     });
+
+    
+
+
+
     </script>
 
     
