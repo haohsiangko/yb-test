@@ -26,7 +26,7 @@
           height: 20px;
           margin-right: 10px;
         }
-        .color1 { background-color: #0000E3; }
+        .color1 { background-color: rgba(0, 0, 255, 0.1); }
         .color2 { background-color: #0080FF; }
         .color3 { background-color: #3CB371; }
         .color4 { background-color: #EA7500; }
@@ -369,7 +369,8 @@ function getColorByValue(value,status,available_spaces) {
     }
     else{
         if(value>0){
-            return '#0000E3';
+            return 'rgba(0, 0, 255, 0.1)'; //'#0000E3'
+            
         }
         else{
             return '#FF60AF';
