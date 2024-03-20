@@ -3,6 +3,7 @@
 <head>
     <title>CSV to Map Markers</title>
     
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
     <style>
         #mapid { 
@@ -72,6 +73,9 @@
 
 
       </style>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+      
 
 
 </head>
@@ -343,6 +347,7 @@ function stopAutoPlay() {
 // 修改播放按钮事件处理，以开始自动播放
 document.getElementById('playButton').onclick = function() {
     startAutoPlay();
+    captureMap();
 };
 
 // 为停止按钮添加事件处理，以停止自动播放
@@ -439,6 +444,29 @@ function getColorByValue(value,status,available_spaces) {
 //     });
 
     
+function captureMap() {
+  let counter = 0; // 用來計數和作為檔案名的一部分
+
+  // 定義一個函式來進行截圖和保存
+  function captureAndSave() {
+    if (counter < 144) { 
+      html2canvas(document.getElementById('mapid')).then(canvas => {
+        canvas.toBlob(function(blob) {
+          saveAs(blob, `map_capture_${counter}.png`);
+        });
+      });
+
+      counter++;
+      setTimeout(captureAndSave, 1000); // 每秒調用一次
+      console.log("finish:", counter);
+    }
+  }
+
+  captureAndSave(); // 開始截圖和保存的過程
+  console.log("test");
+}
+
+
 
 
 
