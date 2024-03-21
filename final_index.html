@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV to Map Markers</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <style>
+        #mapid { /*height: 1080px;*/
+        width: 100%;
+        height: 90vh;
+        }
+        
+    </style>
+    <style>
+        .legend {
+          display: flex;
+          /* flex-direction: column; */
+            flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
+            justify-content: space-around; /* Distribute space around items */
+            align-items: center; /* Center items vertically */
+        }
+        .legend-item {
+          align-items: center;
+            margin-right: 10px;
+            display: flex; /* Display legend items inline with space */
+        }
+        .color-box {
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+          margin-right: 5px;
+        }
+        .color1 { background-color: #800026; }
+        .color2 { background-color: #EA7500; }
+        .color3 { background-color: #3CB371; }
+        .color4 { background-color: #0080FF; }
+        .color5 { background-color: #0000E3; }
+        .color6 { background-color: #eee; }
+
+        .floating-ui {
+            position: absolute;
+            top: 0;
+            left: 20%;
+            width: 80%;
+            z-index: 1000; /* Make sure UI floats above the map */
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+     
+      
+/* 對於較小的設備 */
+@media (max-width: 600px) {
+  .leaflet-popup-content {
+    width: 250px !important; /* 允許內容根據需要擴展 */
+}
+.leaflet-popup {
+    max-width: 300px !important; /* 或您希望的任何其他寬度，這裡設置為400px */
+}
+
+}
+
+/* 對於中等尺寸的設備 */
+@media (min-width: 601px) and (max-width: 1024px) {
+
+
+  .leaflet-popup-content {
+    width: 350px !important; /* 允許內容根據需要擴展 */
+}
+.leaflet-popup {
+    max-width: 400px !important; /* 或您希望的任何其他寬度，這裡設置為400px */
+}
+
+}
+
+/* 對於較大的設備 */
+@media (min-width: 1025px) {
+
+  .leaflet-popup-content {
+    width: 750px !important; /* 允許內容根據需要擴展 */
+}
+.leaflet-popup {
+    max-width: 800px !important; /* 或您希望的任何其他寬度，這裡設置為400px */
+}
+}
+
+
+
+      </style>
+
+
+
+
+</head>
+<body>
+
+  <div class="floating-ui">
+    <div class="legend">
+      <button id="playButton" class="legend-item">Play</button>
+      <p  class="legend-item">低水位率（一天有多少時間比例，可借的車輛數，在全部車柱的20%以下）</p>
+      
+      <div class="legend-item">
+            <div class="color-box color1"></div>
+            <label>80%以上（愈不好借）</label>
+        </div>
+        <div class="legend-item">
+            <div class="color-box color2"></div>
+            <label>60%~80%</label>
+        </div>
+        <div class="legend-item">
+            <div class="color-box color3"></div>
+            <label>40%~60%</label>
+        </div>
+        <div class="legend-item">
+            <div class="color-box color4"></div>
+            <label>20%~40%</label>
+        </div>
+        <div class="legend-item">
+            <div class="color-box color5"></div>
+            <label>20%以下（愈好借）</label>
+        </div>
+        <div class="legend-item">
+            <div class="color-box color6"></div>
+            <label>站點有狀況</label>
+        </div>
+    </div>
+</div>
+
+    <div id="mapid"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    
+    <script>
+        var mymap = L.map('mapid').setView([25.0330, 121.5654], 13);
+
+        //https://api.mapbox.com/styles/v1/trdesigners/clu0ykowm024c01pteflt5emt/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoidHJkZXNpZ25lcnMiLCJhIjoiY2wzMnZrb3NlMGg1bzNkbjMwMXcyNGdqaSJ9.Lu_l-YQvvcLymn7fRLD5LA
+        //'https://api.mapbox.com/styles/v1/trdesigners/clrhefwmh006901rb44ho8fzy/tiles/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJkZXNpZ25lcnMiLCJhIjoiY2wzMnZrb3NlMGg1bzNkbjMwMXcyNGdqaSJ9.Lu_l-YQvvcLymn7fRLD5LA'
+        //"https://api.mapbox.com/styles/v1/trdesigners/cltyl9vzg01va01oidjsk0opq/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidHJkZXNpZ25lcnMiLCJhIjoiY2wzMnZrb3NlMGg1bzNkbjMwMXcyNGdqaSJ9.Lu_l-YQvvcLymn7fRLD5LA"
+
+        L.tileLayer("https://api.mapbox.com/styles/v1/trdesigners/clu0ykowm024c01pteflt5emt/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoidHJkZXNpZ25lcnMiLCJhIjoiY2wzMnZrb3NlMGg1bzNkbjMwMXcyNGdqaSJ9.Lu_l-YQvvcLymn7fRLD5LA", {
+            attribution: 'Mapbox|The Reporter'//'© OpenStreetMap contributors'
+        }).addTo(mymap);
+
+//原本leaflet的地圖
+//         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+//     attribution: 'Map tiles by Carto, under CC BY 3.0. Data by OpenStreetMap, under ODbL.',
+//     maxZoom: 19
+// }).addTo(mymap);
+
+
+        var csvUrl = 'test.csv';
+
+// 網頁加載完成後自動執行
+document.addEventListener('DOMContentLoaded', function() {
+    fetch(csvUrl)
+    .then(response => response.text())
+    .then(csvText => {
+        // 使用PapaParse解析CSV文本
+        Papa.parse(csvText, {
+            header: true,
+            complete: function(results) {
+                results.data.forEach(function(row) {
+                    addMarker(row);
+                });
+            }
+        });
+    })
+    .catch(error => console.error('Error loading the CSV file:', error));
+});
+
+
+        function getColorByValue(value,status) {
+            if (status==2){
+                return '#eee';
+            }
+            
+            else{
+                return value > 80 ? '#800026' :
+                    value > 60 ? '#EA7500' :
+                    value > 40 ? '#3CB371' :
+                    value > 20 ? '#0080FF' :
+                                    '#0000E3'; // 根据需要调整这些阈值和颜色
+            }
+
+        }
+            
+
+
+        function addMarker(data) {
+        if(data.lat && data.lng) {
+            var fillColor = getColorByValue(data.r_low,data.status); // 使用getColorByValue函数根据r_low字段值获取颜色
+            
+            var circleMarker = L.circleMarker([data.lat, data.lng], {
+                color: 'gray',// 圆点边缘的颜色，固定或也可以动态设置
+                opacity: 0.5,      
+                weight: 0.5,
+                fillColor: fillColor, // 圆点内部的填充颜色，根据r_low值动态决定
+                fillOpacity: 0.7,  // 圆点填充的透明度
+                radius: 5          // 圆点的半径
+            }).addTo(mymap);
+            
+            if(data.img2) {
+                // 假设图片URL是相对的，您可能需要调整路径。
+                var imageUrl = 'https://haohsiangko.github.io/yb-test/data_clean/2024-02-19/' + data.img2; // 根据您的图片目录更新路径
+                circleMarker.bindPopup("<img src='" + imageUrl + "' style='width:100%;'>" 
+                // +
+                //  "<p><b>低水位率：</b>"+ data.r_low +"</p>" +
+                //  "<p><b>高水位率：</b>"+ data.r_high +"</p>" +
+                //  "<p><b>見車率：</b>"+ data.r_bike_T +"</p>" +
+                //  "<p><b>見柱率：</b>"+ data.r_stop_T +"</p>" 
+                 );
+            }
+        }
+    }
+
+//
+function resizeMap() {
+  var windowHeight = window.innerHeight; // 獲取當前視窗的高度
+      var newHeight = windowHeight * 0.8; // 計算地圖高度為視窗高度的80%
+      document.getElementById('mapid').style.height = newHeight + 'px'; // 設定地圖容器的高度
+      console.log("resize map")
+  }
+
+  // 當視窗大小變化時，重新設定地圖高度
+  window.onresize = resizeMap;
+
+
+    </script>
+</body>
+</html>
