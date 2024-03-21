@@ -183,9 +183,13 @@
 
         var mymap = L.map('mapid').setView([25.0330, 121.5654], 13);
 
-        
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+        //https://api.mapbox.com/styles/v1/trdesigners/clu0ykowm024c01pteflt5emt/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoidHJkZXNpZ25lcnMiLCJhIjoiY2wzMnZrb3NlMGg1bzNkbjMwMXcyNGdqaSJ9.Lu_l-YQvvcLymn7fRLD5LA
+
+        //'https://api.mapbox.com/styles/v1/trdesigners/clrhefwmh006901rb44ho8fzy/tiles/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJkZXNpZ25lcnMiLCJhIjoiY2wzMnZrb3NlMGg1bzNkbjMwMXcyNGdqaSJ9.Lu_l-YQvvcLymn7fRLD5LA'
+        //"https://api.mapbox.com/styles/v1/trdesigners/cltyl9vzg01va01oidjsk0opq/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidHJkZXNpZ25lcnMiLCJhIjoiY2wzMnZrb3NlMGg1bzNkbjMwMXcyNGdqaSJ9.Lu_l-YQvvcLymn7fRLD5LA"
+
+        L.tileLayer("https://api.mapbox.com/styles/v1/trdesigners/clu0ykowm024c01pteflt5emt/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoidHJkZXNpZ25lcnMiLCJhIjoiY2wzMnZrb3NlMGg1bzNkbjMwMXcyNGdqaSJ9.Lu_l-YQvvcLymn7fRLD5LA", {
+            attribution: 'Mapbox|The Reporter'//'© OpenStreetMap contributors'
         }).addTo(mymap);
 
 //         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
