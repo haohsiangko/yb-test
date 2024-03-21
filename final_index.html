@@ -16,7 +16,7 @@
           display: flex;
           /* flex-direction: column; */
             flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
-            justify-content: space-around; /* Distribute space around items */
+           /* justify-content: space-around;  Distribute space around items */
             align-items: center; /* Center items vertically */
         }
         .legend-item {
@@ -38,51 +38,37 @@
         .color6 { background-color: #eee; }
 
         .floating-ui {
-            position: absolute;
-            top: 0;
-            left: 20%;
-            width: 80%;
-            z-index: 1000; /* Make sure UI floats above the map */
-            background: rgba(255, 255, 255, 0.8);
-            padding: 10px;
-            border-radius: 5px;
-        }
+    position: absolute;
+    top: 0;
+    left: 20%; /* 或者是一个具体的左边距，取决于您的布局需求 */
+    right: 0; /* 确保当宽度变化时，它能够从右侧收缩 */
+    width: 80%;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+
+}
+    
+
+
+    #collapseBtn, #expandBtn {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
         
      
-      
-/* 對於較小的設備 */
-@media (max-width: 600px) {
-  .leaflet-popup-content {
-    width: 250px !important; /* 允許內容根據需要擴展 */
-}
-.leaflet-popup {
-    max-width: 300px !important; /* 或您希望的任何其他寬度，這裡設置為400px */
-}
 
-}
-
-/* 對於中等尺寸的設備 */
-@media (min-width: 601px) and (max-width: 1024px) {
-
-
-  .leaflet-popup-content {
-    width: 350px !important; /* 允許內容根據需要擴展 */
-}
-.leaflet-popup {
-    max-width: 400px !important; /* 或您希望的任何其他寬度，這裡設置為400px */
-}
-
-}
-
-/* 對於較大的設備 */
-@media (min-width: 1025px) {
-
-  .leaflet-popup-content {
-    width: 750px !important; /* 允許內容根據需要擴展 */
-}
-.leaflet-popup {
-    max-width: 800px !important; /* 或您希望的任何其他寬度，這裡設置為400px */
-}
+#customTooltip {
+  /* 示例样式 */
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  border-radius: 8px;
+  padding: 20px;
 }
 
 
@@ -94,12 +80,17 @@
 
 </head>
 <body>
+   
 
   <div class="floating-ui">
+    <button id="collapseBtn">[-]</button>
+    <button id="expandBtn" style="display: none;">[+]</button>
+
+
     <div class="legend">
       <button id="playButton" class="legend-item">Play</button>
       <p  class="legend-item">低水位率（一天有多少時間比例，可借的車輛數，在全部車柱的20%以下）</p>
-      
+    </div><div class="legend"> 
       <div class="legend-item">
             <div class="color-box color1"></div>
             <label>80%以上（愈不好借）</label>
@@ -128,6 +119,14 @@
 </div>
 
     <div id="mapid"></div>
+    <div id="customTooltip" style="display: none; position: absolute; width: 80%; height: 80%; top: 10%; bottom: 10%; left: 10%;right:10% ; background-color: white; z-index: 1000; border: 1px solid #ccc; overflow: auto;">
+        <button id="closeTooltip" style="float: right;">X</button>
+        <!-- 在这里添加您想显示的内容 -->
+        <div id="showInfo"></div>
+    </div>
+
+
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -201,18 +200,52 @@ document.addEventListener('DOMContentLoaded', function() {
                 fillOpacity: 0.7,  // 圆点填充的透明度
                 radius: 5          // 圆点的半径
             }).addTo(mymap);
-            
-            if(data.img2) {
-                // 假设图片URL是相对的，您可能需要调整路径。
-                var imageUrl = 'https://haohsiangko.github.io/yb-test/data_clean/2024-02-19/' + data.img2; // 根据您的图片目录更新路径
-                circleMarker.bindPopup("<img src='" + imageUrl + "' style='width:100%;'>" 
-                // +
-                //  "<p><b>低水位率：</b>"+ data.r_low +"</p>" +
-                //  "<p><b>高水位率：</b>"+ data.r_high +"</p>" +
-                //  "<p><b>見車率：</b>"+ data.r_bike_T +"</p>" +
-                //  "<p><b>見柱率：</b>"+ data.r_stop_T +"</p>" 
-                 );
+
+            // 为 circleMarker 添加点击事件监听
+            circleMarker.on('click', function() {
+                // 显示自定义 tooltip
+                document.getElementById('customTooltip').style.display = 'block';
+                // 创建并添加新的图片元素
+                var img = document.createElement('img');
+                var imageUrl;
+
+                // 根据视口宽度决定使用桌面版还是手机版链接
+                var widthThreshold = 768;
+                if (window.innerWidth > widthThreshold) {
+                    imageUrl = 'https://haohsiangko.github.io/yb-test/data_clean/2024-02-19/' + data.img2; // 桌面版链接
+                } else {
+                    imageUrl = "https://www.twreporter.org/images/20240320171137-be824ba4f15547db79eb729024aa7dec-desktop.png"
+                    // imageUrl = 'https://haohsiangko.github.io/yb-test/data_clean/2024-02-19/' + data.img2_m; // 手机版链接
+                }
+        
+                img.src = imageUrl; // 替换为您的图片 URL
+                img.style.width = '100%';
+                document.getElementById('customTooltip').appendChild(img);
+                document.getElementById('showInfo').innerHTML = "<h2>" +data.name_tw+"</h2>";
+                
+            });
+
+            // 关闭按钮的事件监听
+            document.getElementById('closeTooltip').addEventListener('click', function() {
+                document.getElementById('customTooltip').style.display = 'none';
+                Array.from(customTooltip.children).forEach(child => {
+            if (child.id !== 'closeTooltip' & child.id !== 'showInfo' ) {
+                customTooltip.removeChild(child);
             }
+        });
+            });
+            
+            // if(data.img2) {
+            //     // 假设图片URL是相对的，您可能需要调整路径。
+            //     var imageUrl = 'https://haohsiangko.github.io/yb-test/data_clean/2024-02-19/' + data.img2; // 根据您的图片目录更新路径
+            //     circleMarker.bindPopup("<img src='" + imageUrl + "' style='width:100%;'>" 
+            //     // +
+            //     //  "<p><b>低水位率：</b>"+ data.r_low +"</p>" +
+            //     //  "<p><b>高水位率：</b>"+ data.r_high +"</p>" +
+            //     //  "<p><b>見車率：</b>"+ data.r_bike_T +"</p>" +
+            //     //  "<p><b>見柱率：</b>"+ data.r_stop_T +"</p>" 
+            //      );
+            // }
         }
     }
 
@@ -226,6 +259,34 @@ function resizeMap() {
 
   // 當視窗大小變化時，重新設定地圖高度
   window.onresize = resizeMap;
+
+  document.getElementById('collapseBtn').addEventListener('click', function() {
+    var floatingUI = document.querySelector('.floating-ui');
+    floatingUI.style.width = '0%'; // 设置宽度
+    floatingUI.style.left = 'auto'; // 从右侧开始缩减宽度
+    floatingUI.style.padding = '0px';
+    // 隐藏除 [+] 按钮之外的所有内容
+    Array.from(floatingUI.children).forEach(child => {
+        if (child.id !== 'expandBtn') {
+            child.style.display = 'none';
+        }
+    });
+    document.getElementById('expandBtn').style.display = 'block'; // 显示 [+] 按钮
+});
+
+document.getElementById('expandBtn').addEventListener('click', function() {
+    var floatingUI = document.querySelector('.floating-ui');
+    floatingUI.style.width = '80%'; // 恢复原始宽度
+    floatingUI.style.left = '20%'; // 恢复原始的 left 值
+    floatingUI.style.padding = '10px';
+    // 显示所有内容
+    Array.from(floatingUI.children).forEach(child => {
+        child.style.display = ''; // 或者根据需要设置为 'block'
+    });
+    this.style.display = 'none'; // 隐藏 [+] 按钮
+});
+
+
 
 
     </script>
