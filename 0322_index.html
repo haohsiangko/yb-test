@@ -88,6 +88,7 @@
             color: #000000;
             line-height: 1.1;
             letter-spacing: 0.025rem;
+            margin: -0.3rem;
         }
 
 
@@ -136,28 +137,29 @@
             border-radius: 20px;
         }
         .legend-item-click:active{
-            background: #ffffff;
+            background: #FFFFFF;
+            color: #000000;
+            opacity: 0.25;
         }
+
 
 
         #customTooltip {
         /* 示例样式 */
-        box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        border-radius: 8px;
-        padding: 20px;
-
-        display: none;
-        position: absolute;
-        width: 80%;
-        height: 80%;
-        top: 10%;
-        bottom: 10%;
-        left: 10%;
-        right:10%;
-        background-color: white;
-        z-index: 1000;
-        border: 1px solid #ccc;
-        overflow: auto;
+            box-shadow: 3px 3px 8px #00000035;
+            border-radius: 8px;
+            padding: 20px;
+            border-style: none;
+            display: none;
+            position: absolute;
+            width: 80%; height: 80%;
+            top: 10%;   bottom: 10%;
+            left: 10%;  right:10%;
+            background-color: #ffffff6e;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1000;
+            overflow: auto;
         }
         #showinfo {
             font-family: Roboto Slab, Noto Sans TC;
@@ -388,7 +390,7 @@
         //"https://api.mapbox.com/styles/v1/trdesigners/cltyl9vzg01va01oidjsk0opq/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoidHJkZXNpZ25lcnMiLCJhIjoiY2wzMnZrb3NlMGg1bzNkbjMwMXcyNGdqaSJ9.Lu_l-YQvvcLymn7fRLD5LA"
 
         L.tileLayer("https://api.mapbox.com/styles/v1/trdesigners/clu0ykowm024c01pteflt5emt/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoidHJkZXNpZ25lcnMiLCJhIjoiY2wzMnZrb3NlMGg1bzNkbjMwMXcyNGdqaSJ9.Lu_l-YQvvcLymn7fRLD5LA", {
-            attribution: 'Mapbox|The Reporter'//'© OpenStreetMap contributors'
+            attribution: 'Mapbox | The Reporter'//'© OpenStreetMap contributors'
         }).addTo(mymap);
 
 //原本leaflet的地圖
