@@ -12,268 +12,90 @@
         
     </style>
     <style>
-        /* new */
-        body{
-            margin: 0px;
-        }
-        .legend-player {
-            position: absolute;
-            z-index: 1000;
-            display: inline;
-            bottom: 12%;
-            left: 15px;
-        }
-        .Player-Button-SVG{
-            display: flex;
-            transition-duration: 0.3s;
-            border-style:none ;
-            background: none;
-            width: 2.5rem;
-            height:auto;
-            margin-top: 0.5rem;
-            padding: 0rem;
-            border-radius: 10px;
-            opacity: 0.75;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-        }
-        .Player-Button-SVG:hover{
-            cursor: pointer;
-            box-shadow: 3px 3px 8px #00000010;
-            opacity: 1;
-        }
-
-        .top-legend{
-            position: absolute;
-            z-index: 1000;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            /* display: table;
-            flex-direction: column;
-            align-items: center;*/
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .date{
-            position: absolute;
-            z-index: 1000;
-            display: flex;
-            bottom: 12%;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            font-family: Roboto Slab, Noto Sans TC;
-            font-weight: 400;
-            font-size: 0.8rem;
-            color: #000000;
-            line-height: 1.1;
-            letter-spacing: 0.025rem;
-        }
-
-        .time-date {
-            /* position: absolute; */
-            z-index: 1000;
-            display: flex;
-            top: 45px;
-            left: 50%;
-            text-align: center;
-            /* width: 300px; */
-            font-family: Roboto Slab, Noto Sans TC;
-            font-weight: 300;
-            font-size: 2.5rem;
-            color: #000000;
-            line-height: 1.1;
-            letter-spacing: 0.025rem;
-        }
-
-
-        .legend-group {
-            /* position: absolute; */
-            z-index: 1000;
-            top: 7px;
-            left:50%;
-            /* display: flex;
-            gap: 5px; */
-            display: inline-table;
-            align-items: center;
-            justify-content: center;
-        }
-        .legend-text {
-            cursor: pointer;
-            display: inline-block; /* 確保padding有效 */
-            font-family: Roboto Slab, Noto Sans TC;
-            font-weight: 400;
-            font-size: 1.1rem;
-            line-height: 1;
-            color: #000000;
-            padding: 0.5rem 0.7rem 0.5rem 0.7rem;
-            letter-spacing: 0.025rem;
-            border-radius: 5px;
-            margin: 3px;
-        }
-        .color1 { color: #CDCDCD; }
-        .color2 { color: #FFBD00; }
-        .color3 { color: #fb2b06; }
-        .color4 { color: #FFFFFF; }
-
-        .legend-item-click {
-            cursor: pointer; /* 改變鼠標指針，增強可點擊的視覺效果 */
-            transition: background-color 0.5s, color 0.5s, opacity 0.5s, border-radius 0.5s; /* 添加過渡動畫使顏色變化更平滑 */
-            background: #ffffff60;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-        .legend-item-click:hover{
-            background: #ffffffcc;
-            color: #000000;
-            backdrop-filter: blur(3px);
-            -webkit-backdrop-filter: blur(3px);
-            box-shadow: 3px 3px 8px #00000010;
-            border-radius: 20px;
-        }
-        .legend-item-click:active{
-            background: #ffffff;
-        }
-
-
-        #customTooltip {
-        /* 示例样式 */
-        box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        border-radius: 8px;
-        padding: 20px;
-
-        display: none;
-        position: absolute;
-        width: 80%;
-        height: 80%;
-        top: 10%;
-        bottom: 10%;
-        left: 10%;
-        right:10%;
-        background-color: white;
-        z-index: 1000;
-        border: 1px solid #ccc;
-        overflow: auto;
-        }
-        #showinfo {
-            font-family: Roboto Slab, Noto Sans TC;
-            font-weight: 400;
-            font-size: 1.1rem;
-        }
-
-        /* .Player-Button{
-            display: flex;
-            transition-duration: 0.3s;
-            padding: 5px 10px 8px 10px;
-            border-style:none ;
-            border-radius: 3px;
-            background-color: #FFFFFF;
-            font-family: Roboto Slab, Noto Sans TC;
-            font-weight: 400;
-            font-size: 0.8rem;
-            letter-spacing: 0.025rem;
-            color: #000000;
-            margin-top: 10px;
-        }
-        .Player-Button:hover{
-            cursor: pointer;
-            background-color: #000000;
-            color: #FFFFFF;
-        } */
-        /* .legend-item-click:focus{
-            background: #CDCDCD;
-            color: #FFFFFF;
-        } */
-                /* .color-box {
-            display: inline-block;
-            border-radius: 50%;
-            width: 0.95rem;
-            height: 0.95rem;
-            margin:-0.15rem -0.1rem -0.15rem -0.15rem ;
-        } */
-
-
-
-/* original code (not reference to) */
-
         .legend {
-        display: flex;
-        /* flex-direction: column; */
+          display: flex;
+          /* flex-direction: column; */
             flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
-        /* justify-content: space-around;  Distribute space around items */
+           /* justify-content: space-around;  Distribute space around items */
             align-items: center; /* Center items vertically */
         }
         .legend-item {
-        align-items: center;
+          align-items: center;
             margin-right: 10px;
             display: flex; /* Display legend items inline with space */
         }
-        /* .color-box {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        margin-right: 5px;
-        } */
+        .color-box {
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+          margin-right: 5px;
+        }
 
-        /* .color1 { background-color: rgba(0, 0, 255, 0.5); }
+        .color1 { background-color: rgba(0, 0, 255, 0.5); }
         .color2 { background-color: #0080FF; }
         .color3 { background-color: #3CB371; }
         .color4 { background-color: #EA7500; }
         .color5 { background-color: #800026; }
         .color6 { background-color: #FF60AF; }
-        .color7 { background-color: #333; } */
+        .color7 { background-color: #333; }
 
 
         .floating-ui {
-            position: absolute;
-            top: 0;
-            left: 20%; /* 或者是一个具体的左边距，取决于您的布局需求 */
-            right: 0; /* 确保当宽度变化时，它能够从右侧收缩 */
-            width: 80%;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 10px;
-            border-radius: 5px;
-            /* pointer-events: none; */
-        }
+    position: absolute;
+    top: 0;
+    left: 20%; /* 或者是一个具体的左边距，取决于您的布局需求 */
+    right: 0; /* 确保当宽度变化时，它能够从右侧收缩 */
+    width: 80%;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+
+}
+    
+
+
+    #collapseBtn, #expandBtn {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+        
+     
+
+#customTooltip {
+  /* 示例样式 */
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+/* 基本樣式 */
+.legend-item-click {
+    cursor: pointer; /* 改變鼠標指針，增強可點擊的視覺效果 */
+    padding: 5px; /* 添加一些內邊距以便於點擊 */
+    border-radius: 5px; /* 給背景添加圓角 */
+    transition: background-color 0.3s, color 0.3s; /* 添加過渡動畫使顏色變化更平滑 */
+    background-color: #e0e0e0; /* 初始背景顏色 */
+    display: inline-block; /* 確保padding有效 */
+    margin: 2px; /* 添加一點間距 */
+}
+
+/* 鼠標懸停時的樣式 */
+.legend-item-click:hover {
+    background-color: #f0f0f0; /* 鼠標懸停時的背景顏色 */
+    color: #333; /* 鼠標懸停時的文字顏色 */
+}
 
 
 
-        #collapseBtn, #expandBtn {
-            position: absolute;
-            top: 30px;
-            right: 30px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-                
-            
 
 
-
-        /* 基本樣式 */
-        .legend-click {
-            cursor: pointer; /* 改變鼠標指針，增強可點擊的視覺效果 */
-            padding: 5px; /* 添加一些內邊距以便於點擊 */
-            border-radius: 5px; /* 給背景添加圓角 */
-            transition: background-color 0.3s, color 0.3s; /* 添加過渡動畫使顏色變化更平滑 */
-            background-color: #e0e0e0; /* 初始背景顏色 */
-            display: inline-block; /* 確保padding有效 */
-            margin: 2px; /* 添加一點間距 */
-        }
-
-        /* 鼠標懸停時的樣式 */
-        .legend-click:hover {
-            background-color: #f0f0f0; /* 鼠標懸停時的背景顏色 */
-            color: #333; /* 鼠標懸停時的文字顏色 */
-        }
-</style>
+      </style>
 
 
 
@@ -281,67 +103,22 @@
 </head>
 <body>
    
-<!-- new -->
-    <div id="countDisplay" style="display: none;">可借狀況</div>
-    <div class="top-legend">
-        <div class="legend-group">
-            <label class="legend-text legend-item-click" data-status="s2" data-active="true">
-                <label class="color1" data-status="s2" data-active="true">⬤</label> 2車以上
-            </label>
-            <label class="legend-text legend-item-click" data-status="s1" data-active="true">
-                <label class="color2" data-status="s1" data-active="true">⬤</label> 僅1車
-            </label>
-            <label class="legend-text legend-item-click" data-status="s0" data-active="true">
-                <label class="color3" data-status="s0" data-active="true">⬤</label> 無車
-            </label>
-            <label class="legend-text legend-item-click" data-status="ss" data-active="true">
-                <label class="color4" data-status="ss" data-active="true">⬤</label> 暫停營運
-            </label>
-        </div>
-        <div id="timeIndexDisplay" class="time-date">Current Time</div>
-    </div>
 
-    <div id="timeIndexDisplay" class="date">[ Current Date ]</div>
-
-    <div class="legend-player">
-        <button id="playButton"  class="Player-Button-SVG">
-            <!-- PLAY BUTTON -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
-                <rect width="20" height="20" rx="5" fill="white"/>
-                <path d="M7.60001 13.5111V6.40002L13.8222 9.95558L7.60001 13.5111Z" fill="#FFBD00"/>
-            </svg>
-        </button>
-        <button id="stopButton"  class="Player-Button-SVG">
-            <!-- PAUSE BUTTON -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
-                <rect width="20" height="20" rx="5" fill="#FFBD00"/>
-                <rect x="7.20001" y="6.80005" width="1.6" height="6.4" fill="white"/>
-                <rect x="11.2" y="6.80005" width="1.6" height="6.4" fill="white"/>
-            </svg>
-        </button>
-    </div>
-    <!-- <div class="legend-player">
-        <button id="playButton" class="Player-Button">播放</button>
-        <button id="stopButton" class="Player-Button">暫停</button>
-    </div> -->
-
-<!-- orignal -->
-
-  <!-- <div class="floating-ui">
+  <div class="floating-ui">
     <button id="collapseBtn">[-]</button>
-    <button id="expandBtn" style="display: none;">[+]</button> -->
+    <button id="expandBtn" style="display: none;">[+]</button>
 
-    
-    <!-- <div class="legend">
+
+    <div class="legend">
       <button id="playButton" class="legend-item">Play</button>
-      <button id="stopButton" class="legend-item">Stop</button> -->
+      <button id="stopButton" class="legend-item">Stop</button>
       <!-- <p  class="legend-item"><b>點擊播放，觀察各時段車輛數</b></p> -->
-      <!-- <b><div id="timeIndexDisplay" class="legend-item">Current Time</div></b>
-        <div id="countDisplay" class="legend-item">可借狀況</div> -->
+      <b><div id="timeIndexDisplay" class="legend-item">Current Time</div></b>
+        <div id="countDisplay" class="legend-item">可借狀況</div>
         <!-- <div id="finishDisplay" class="legend-item">可還狀況</div> -->
     </div>
 
-    <!-- <div class="legend"> 
+    <div class="legend"> 
 
         <div class="legend-item">
             <div class="color-box color1"></div>
@@ -360,13 +137,12 @@
             <label class="legend-item-click" data-status="ss" data-active="true">暫停營運</label>
           </div>
 
-    </div> -->
-
+    </div>
 
 </div>
 
     <div id="mapid"></div>
-    <div id="customTooltip">
+    <div id="customTooltip" style="display: none; position: absolute; width: 80%; height: 80%; top: 10%; bottom: 10%; left: 10%;right:10% ; background-color: white; z-index: 1000; border: 1px solid #ccc; overflow: auto;">
         <button id="closeTooltip" style="float: right;">X</button>
         <!-- 在这里添加您想显示的内容 -->
         <div id="showInfo"></div>
@@ -381,7 +157,7 @@
 
     
     <script>
-        var mymap = L.map('mapid').setView([25.0430, 121.5584], 13);
+        var mymap = L.map('mapid').setView([25.0330, 121.5654], 13);
 
         //https://api.mapbox.com/styles/v1/trdesigners/clu0ykowm024c01pteflt5emt/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoidHJkZXNpZ25lcnMiLCJhIjoiY2wzMnZrb3NlMGg1bzNkbjMwMXcyNGdqaSJ9.Lu_l-YQvvcLymn7fRLD5LA
         //'https://api.mapbox.com/styles/v1/trdesigners/clrhefwmh006901rb44ho8fzy/tiles/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJkZXNpZ25lcnMiLCJhIjoiY2wzMnZrb3NlMGg1bzNkbjMwMXcyNGdqaSJ9.Lu_l-YQvvcLymn7fRLD5LA'
@@ -464,9 +240,9 @@ Papa.parse(csvUrl, {
         var fillColor = getColorByValue(point.level, point.status, point.available_spaces); 
 
         var marker = L.circleMarker([point.lat, point.lng], {
-            color: '#F1F1F1',// 圆点边缘的颜色，固定或也可以动态设置
+            color: 'gray',// 圆点边缘的颜色，固定或也可以动态设置
                 opacity: 0.5,      
-                weight: 1,
+                weight: 0.5,
                 fillColor: fillColor, // 圆点内部的填充颜色，根据r_low值动态决定
                 fillOpacity: 0.7,  // 圆点填充的透明度
                 radius: 5,          // 圆点的半径
@@ -512,7 +288,9 @@ Papa.parse(csvUrl, {
                 // img.style.width = '100%';
                 // document.getElementById('customTooltip').appendChild(img);
                 document.getElementById('level').innerHTML = "<img src='" + imageUrl + "' style='width:100%'>";
-                document.getElementById('showInfo').innerHTML = point.name_tw;
+
+                document.getElementById('showInfo').innerHTML = "<h2>" +point.name_tw+"</h2>";
+                
 
 });
 
@@ -583,7 +361,7 @@ Papa.parse(csvUrl, {
         img.style.width = '100%';
         // document.getElementById('customTooltip').appendChild(img);
         document.getElementById('level').innerHTML = "<img src='" + imageUrl + "' style='width:100%'>";
-        document.getElementById('showInfo').innerHTML = point.name_tw;
+        document.getElementById('showInfo').innerHTML = "<h2>" +point.name_tw+"</h2>";
 
 
     });
@@ -776,21 +554,18 @@ console.log(markers);
 
 
 function getColorByValue(value,status,available_spaces) {
-    
-    //getComputedStyle(document.querySelector('.color1')).color
-    
     if (status==2){
-        return getComputedStyle(document.querySelector('.color3')).color;; //'#333'
+        return '#333';
     }
     else if(available_spaces==1){
-        return getComputedStyle(document.querySelector('.color2')).color;; //'#800026'
+        return '#800026';
     }
     else{
         if(value>0){
-            return getComputedStyle(document.querySelector('.color1')).color; //'rgba(0, 0, 255, 0.5)'
+            return 'rgba(0, 0, 255, 0.5)'; //'#0000E3'
         }
         else{
-            return getComputedStyle(document.querySelector('.color4')).color;; //'#FF60AF'
+            return '#FF60AF';
         }
     }
 
@@ -957,7 +732,6 @@ document.getElementById('expandBtn').addEventListener('click', function() {
     });
     this.style.display = 'none'; // 隐藏 [+] 按钮
 });
-
 
 
 
