@@ -74,6 +74,25 @@
   padding: 20px;
 }
 
+/* 基本樣式 */
+.legend-item-click {
+    cursor: pointer; /* 改變鼠標指針，增強可點擊的視覺效果 */
+    padding: 5px; /* 添加一些內邊距以便於點擊 */
+    border-radius: 5px; /* 給背景添加圓角 */
+    transition: background-color 0.3s, color 0.3s; /* 添加過渡動畫使顏色變化更平滑 */
+    background-color: #e0e0e0; /* 初始背景顏色 */
+    display: inline-block; /* 確保padding有效 */
+    margin: 2px; /* 添加一點間距 */
+}
+
+/* 鼠標懸停時的樣式 */
+.legend-item-click:hover {
+    background-color: #f0f0f0; /* 鼠標懸停時的背景顏色 */
+    color: #333; /* 鼠標懸停時的文字顏色 */
+}
+
+
+
 
 
       </style>
@@ -103,19 +122,19 @@
 
         <div class="legend-item">
             <div class="color-box color1"></div>
-            <label>2車以上</label>
+            <label class="legend-item-click" data-status="s2" data-active="true">2車以上</label>
           </div>
           <div class="legend-item">
             <div class="color-box color5"></div>
-            <label>僅1車</label>
+            <label class="legend-item-click"  data-status="s1" data-active="true">僅1車</label>
           </div>
           <div class="legend-item">
             <div class="color-box color6"></div>
-            <label>無車</label>
+            <label class="legend-item-click" data-status="s0" data-active="true">無車</label>
           </div>
         <div class="legend-item">
             <div class="color-box color7"></div>
-            <label>暫停營運</label>
+            <label class="legend-item-click" data-status="ss" data-active="true">暫停營運</label>
           </div>
 
     </div>
@@ -156,6 +175,17 @@
 
 
         var csvUrl = '0305_10_min.csv'; //'test.csv';
+
+       
+// console.log(markers);
+var labelStates = {
+    s2: true,  // 2车以上，默认显示
+    s1: true,  // 仅1车，默认显示
+    s0: true,  // 无车，默认显示
+    ss: true   // 暂停营运，默认显示
+};
+
+
 
 Papa.parse(csvUrl, {
     download: true, // 表示我們需要下載檔案
@@ -215,12 +245,16 @@ Papa.parse(csvUrl, {
                 weight: 0.5,
                 fillColor: fillColor, // 圆点内部的填充颜色，根据r_low值动态决定
                 fillOpacity: 0.7,  // 圆点填充的透明度
-                radius: 5          // 圆点的半径
+                radius: 5,          // 圆点的半径
+                data: point
     }).addTo(mymap);
 
         var key = point.station_no; // 假设每个点都有一个唯一的ID作为标识符
 
         markers[key] = marker;
+
+
+        
 
         // console.log(markers)
         // console.log(marker)
@@ -276,6 +310,7 @@ Papa.parse(csvUrl, {
             });
 
 
+            
 
 
 
@@ -380,6 +415,20 @@ function startAutoPlay() {
         drawPointsForTime(currentTimeIndex);
         // console.log(currentTimeIndex)
 
+//////
+document.querySelectorAll('.legend-item-click').forEach(function(item) {
+    item.addEventListener('click', function() {
+        var isActive = this.getAttribute('data-active') === 'true';
+        var status = this.getAttribute('data-status');
+        
+        // 切換狀態並更新顯示
+        this.setAttribute('data-active', isActive ? 'false' : 'true');
+        updateMarkers(status, isActive, markers); // 傳遞當前的isActive狀態
+    });
+});
+//////
+        
+
         currentTimeIndex = (currentTimeIndex + 10) % 1440;
         // console.log("here");
         // console.log(currentTimeIndex);
@@ -413,17 +462,91 @@ document.getElementById('stopButton').onclick = function() {
 
 
 
+document.querySelectorAll('.legend-item-click').forEach(function(item) {
+    item.addEventListener('click', function() {
+        var status = this.getAttribute('data-status');
+        
+  
+        var isActive = this.getAttribute('data-active') === 'true';
+        var status = this.getAttribute('data-status');
+        // 切换状态并更新全局变量
+        labelStates[status] = !labelStates[status];
+        // // 可能需要重新绘制地图上的数据点
+        // redrawDataPoints();
+        
+        // 切換狀態並更新顯示
+        this.setAttribute('data-active', isActive ? 'false' : 'true');
+        updateMarkers(status, isActive, markers); // 傳遞當前的isActive狀態
+    });
+});
+
+
+
+function updateMarkers(status, shouldDisplay, markers) {
+
+    for (var key in markers) {
+        var marker = markers[key];
+        // console.log(marker);
+        var markerData = marker.options.data; // 现在实际使用markerData
+        // console.log(markerData);
+
+console.log(status+" "+markerData.available_spaces);
+        // 以“无车”为例，判断逻辑可能如下：
+        var matchCondition = false; 
+        if (status === "s0" && +markerData.available_spaces == 0) {
+            matchCondition = true;
+        } else if (status === "s1" && +markerData.available_spaces == 1) {
+            matchCondition = true;
+        } else if (status === "s2" && +markerData.available_spaces >= 2) {
+            matchCondition = true;
+        } else if (status === "ss" && +markerData.status == 2) {
+            matchCondition = true;
+        } // 可以根据需要添加更多条件分支
+
+        console.log(shouldDisplay+" "+matchCondition);
+
+        if (shouldDisplay && matchCondition) {
+            mymap.removeLayer(marker);
+            console.log("REMOVE");
+        } else if (!shouldDisplay && matchCondition) {
+            marker.addTo(mymap);
+            console.log("ADD");
+            
+        }
+    }
+
+
+}
+
+console.log(markers);
+
+// function redrawDataPoints() {
+//     // 假设dataPoints是你所有的数据点
+//     markers.forEach(function(point) {
+//         var marker = markers[point.station_no];
+//         var shouldDisplay = labelStates[point.dataStatus]; // 假设每个点都有一个dataStatus属性
+
+//         if (shouldDisplay) {
+//             marker.addTo(mymap);
+//         } else {
+//             mymap.removeLayer(marker);
+//         }
+//     });
+// }
+
+
+
+
+
+
+
+
+
 
 
 
     }//complete
 });//////papaparse
-
-
-
-
-
-
 
 
 
@@ -576,6 +699,10 @@ function resizeMap() {
   // 當視窗大小變化時，重新設定地圖高度
   window.onresize = resizeMap;
 
+
+
+
+
   document.getElementById('collapseBtn').addEventListener('click', function() {
     var floatingUI = document.querySelector('.floating-ui');
     floatingUI.style.width = '0%'; // 设置宽度
@@ -590,6 +717,10 @@ function resizeMap() {
     document.getElementById('expandBtn').style.display = 'block'; // 显示 [+] 按钮
 });
 
+
+
+
+
 document.getElementById('expandBtn').addEventListener('click', function() {
     var floatingUI = document.querySelector('.floating-ui');
     floatingUI.style.width = '80%'; // 恢复原始宽度
@@ -601,6 +732,8 @@ document.getElementById('expandBtn').addEventListener('click', function() {
     });
     this.style.display = 'none'; // 隐藏 [+] 按钮
 });
+
+
 
 
 
