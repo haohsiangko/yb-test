@@ -292,7 +292,7 @@
         <div id="timeIndexDisplay" class="time-date">Current Time</div>
     </div>
 
-    <div id="timeIndexDisplay" class="date">[ Current Date ]</div>
+    <div id="dateIndexDisplay" class="date">[ Current Date ]</div>
 
     <div class="legend-player">
         <button id="playButton" class="Player-Button-Motion Play-SVG">
@@ -319,6 +319,12 @@
         <!-- 在这里添加您想显示的内容 -->
         <div id="showInfo"></div>
         <div id="level"></div>
+        <div id="inner_available"></div>
+        <div id="inner_empty"></div>
+        <div id="inner_date"></div>
+        <div id="inner_time"></div>
+        <div id="inner_status"></div>
+
     </div>
 
 
@@ -492,7 +498,8 @@
                             // console.log(markers)
                             // console.log(marker)
                             // 更新时间指标显示
-                            document.getElementById('timeIndexDisplay').innerText = point.time_every_min;
+                            document.getElementById('timeIndexDisplay').innerText = point.time_every_min.split(" ")[1].slice(0,5);
+                            document.getElementById('dateIndexDisplay').innerText = point.time_every_min.split(" ")[0];
                             document.getElementById('countDisplay').innerText = "無車站點數:" + count_zero + "  僅1車站數:" + count_one + "  2車以上站數:" + count_above_2;
                             // document.getElementById('finishDisplay').innerText = "無柱站點數:" + count_full +"  剩1柱站數:" +count_almost_full +"  2柱以上站數:"+count_can_park;
 
@@ -522,7 +529,18 @@
                                 // document.getElementById('customTooltip').appendChild(img);
                                 document.getElementById('level').innerHTML = "<img src='" + imageUrl + "' style='width:100%'>";
                                 document.getElementById('showInfo').innerHTML = point.name_tw;
+                                document.getElementById('inner_available').innerHTML = "可借車數：" + Math.floor(point.available_spaces);
+                                document.getElementById('inner_empty').innerHTML = "可還柱數／總柱數：" + Math.floor(point.empty_spaces) + "／" + Math.floor(point.parking_spaces);
+                                document.getElementById('inner_date').innerHTML = "日期：" + point.time_every_min.split(" ")[0];
+                                document.getElementById('inner_time').innerHTML = "時間：" + point.time_every_min.split(" ")[1].slice(0,5);
+                                c = getColorByValue(point.level, point.status, point.available_spaces);
+                                s = getStatus(point.level, point.status, point.available_spaces);
+                                document.getElementById('inner_status').innerHTML = "<div style='display: flex;'><div style='color: "+c +"'>⬤</div><div>"+s+"</div></div>";
+                                
 
+                
+                                
+                                
                             });
 
 
@@ -994,6 +1012,24 @@
                 }
             }
 
+        }
+    
+     <script> // get map dots Status
+        function getStatus(value, status, available_spaces) {
+            if (status == 2) {
+                return "暫停營運"; //'#333'
+            }
+            else if (available_spaces == 1) {
+                return "僅1車"; //'#800026'
+            }
+            else {
+                if (value > 0) {
+                    return "2車以上"; //'rgba(0, 0, 255, 0.5)'
+                }
+                else {
+                    return "無車"; //'#FF60AF'
+                }
+            }
         }
     </script>
 
