@@ -5,19 +5,26 @@
     <title>CSV to Map Markers</title>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <style>
-        #mapid {
-            /*height: 1080px;*/
-            width: 100%;
-            height: 90vh;
-        }
-    </style>
-    <style>
-        /* new */
-        body {
-            margin: 0px;
+
+    <style> /* Master */
+
+        body { margin: 0px; }
+        #mapid { width: 100%; height: 90vh; }
+
+        :root {
+            --color01 : #CDCDCD;
+            --color02 : #FFBD00;
+            --color03 : #fb2b06;
+            --color04 : #FFF;
+            --color-main-01 : #FFBD00;
+            --color-main-02 : #ffbb0080;
+            --color-minor-01 :  #FFFFFF;
+            --color-minor-02 :  #ffffff80;
         }
 
+    </style>
+
+    <style> /* Overlay UI */
         .legend-player {
             position: absolute;
             z-index: 1000;
@@ -26,7 +33,7 @@
             left: 15px;
         }
 
-        .Play-Button-SVG {
+        .Player-Button-Motion {
             display: flex;
             transition-duration: 0.3s;
             border-style: none;
@@ -40,25 +47,18 @@
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
         }
-        .Pause-Button-SVG {
-            display: flex;
-            transition-duration: 0.3s;
-            border-style: none;
-            background: none;
-            width: 2.5rem;
-            height: auto;
-            margin-top: 0.5rem;
-            padding: 0rem;
-            border-radius: 10px;
-            opacity: 0.75;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-        }
-
-        .Player-Button-SVG:hover {
+        .Player-Button-Motion:hover {
             cursor: pointer;
             box-shadow: 3px 3px 8px #00000010;
             opacity: 1;
+            border-radius: 30px;
+        }
+
+        .Play-SVG{
+            background: var(--color-minor-01);
+        }
+        .Pause-SVG {
+
         }
 
         .svg_bg[data-active="true"] {
@@ -146,39 +146,29 @@
             margin: 3px;
         }
 
-        .color1 {
-            color: #CDCDCD;
-        }
-
-        .color2 {
-            color: #FFBD00;
-        }
-
-        .color3 {
-            color: #fb2b06;
-        }
-
-        .color4 {
-            color: #FFF;
-        }
+        .color1 { color: #CDCDCD; }
+        .color2 { color: #FFBD00; }
+        .color3 { color: #fb2b06; }
+        .color4 { color: #FFF; }
 
         .legend-item-click {
             cursor: pointer;
             /* 改變鼠標指針，增強可點擊的視覺效果 */
-            transition: background-color 0.5s, color 0.5s, opacity 0.5s, border-radius 0.75s;
+            transition: background-color 1s, color 0.5s, opacity 0.5s, border-radius 1s;
             /* 添加過渡動畫使顏色變化更平滑 */
-            border-radius: 10px;
+            border-radius: 5px;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            box-shadow: 3px 3px 8px #00000010;
             /* border-style: solid;
             border-width: 2px; */
+            box-shadow: inset #ffffffaa 0px 0px 10px 0px;
         }
         .legend-item-click:hover {
             background: #ffffff85;
             color: #000;
             backdrop-filter: blur(3px);
             -webkit-backdrop-filter: blur(3px);
-            box-shadow: 3px 3px 8px #00000010;
             border-radius: 20px;
         }
         .legend-item-click[data-active="true"] {
@@ -187,20 +177,22 @@
             /* 其他勾選時的樣式 */
         }
         .legend-item-click[data-active="false"] {
-            text-decoration: line-through;
+            /* text-decoration: line-through; */
             /* 或者是未勾選時的特殊樣式 */
             /* 其他未勾選時的樣式 */
-            /* background: #00000060; */
             color: #00000050;
             backdrop-filter: blur(3px);
             -webkit-backdrop-filter: blur(3px);
+            border-radius: 20px;
         }
         /* .legend-item-click:active {
             background: #FFFFFF;
             color: #000000;
             opacity: 0.25;
         } */
+    </style> 
 
+    <style> /* Popup Panel */
         #customTooltip {
             /* 示例样式 */
             box-shadow: 3px 3px 8px #00000035;
@@ -227,10 +219,9 @@
             font-weight: 400;
             font-size: 1.1rem;
         }
+    </style>
 
-
-
-        /* original code (not reference to) */
+    <style> /* commented old version*/
 
         .legend {
             display: flex;
@@ -242,12 +233,12 @@
             /* Center items vertically */
         }
 
-        .legend-item {
+        /* .legend-item {
             align-items: center;
             margin-right: 10px;
             display: flex;
-            /* Display legend items inline with space */
-        }
+            Display legend items inline with space
+        } */
 
         .floating-ui {
             position: absolute;
@@ -274,60 +265,28 @@
             cursor: pointer;
             font-size: 16px;
         }
-
-
-
-
-
-        /* 基本樣式 */
-        .legend-click {
-            cursor: pointer;
-            /* 改變鼠標指針，增強可點擊的視覺效果 */
-            padding: 5px;
-            /* 添加一些內邊距以便於點擊 */
-            border-radius: 5px;
-            /* 給背景添加圓角 */
-            transition: background-color 0.3s, color 0.3s;
-            /* 添加過渡動畫使顏色變化更平滑 */
-            background-color: #e0e0e0;
-            /* 初始背景顏色 */
-            display: inline-block;
-            /* 確保padding有效 */
-            margin: 2px;
-            /* 添加一點間距 */
-        }
-
-        /* 鼠標懸停時的樣式 */
-        .legend-click:hover {
-            background-color: #f0f0f0;
-            /* 鼠標懸停時的背景顏色 */
-            color: #333;
-            /* 鼠標懸停時的文字顏色 */
-        }
     </style>
-
-
-
-
+    
 </head>
 
-<body>
-<!--14:00 check  -->
-    <!-- new -->
+<body> <!-- Main UI -->
+
+    <!-- Overlay UI -->
+
     <div id="countDisplay" style="display: none;">可借狀況</div>
     <div class="top-legend">
         <div class="legend-group">
             <label class="legend-text legend-item-click" data-status="s2" data-active="true">
-                <label class="color1" data-status="s2" data-active="true">⬤</label> 2車以上
+                <label data-status="s2" data-active="true" style="color: var(--color01)">⬤</label> 2車以上
             </label>
             <label class="legend-text legend-item-click" data-status="s1" data-active="true">
-                <label class="color2" data-status="s1" data-active="true">⬤</label> 僅1車
+                <label -data-status="s1" data-active="true" style="color: var(--color02)">⬤</label> 僅1車
             </label>
             <label class="legend-text legend-item-click" data-status="s0" data-active="true">
-                <label class="color3" data-status="s0" data-active="true">⬤</label> 無車
+                <label data-status="s0" data-active="true" style="color: var(--color03)">⬤</label> 無車
             </label>
             <label class="legend-text legend-item-click" data-status="ss" data-active="true">
-                <label class="color4" data-status="ss" data-active="true">⬤</label> 暫停營運
+                <label data-status="ss" data-active="true" style="color: var(--color04)">⬤</label> 暫停營運
             </label>
         </div>
         <div id="timeIndexDisplay" class="time-date">Current Time</div>
@@ -336,14 +295,13 @@
     <div id="timeIndexDisplay" class="date">[ Current Date ]</div>
 
     <div class="legend-player">
-        <button id="playButton" class="Play-Button-SVG">
+        <button id="playButton" class="Player-Button-Motion Play-SVG">
             <!-- PLAY BUTTON -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
-                <rect class="svg_bg_1" width="20" height="20" rx="5" fill="white" data-active="true"/>
                 <path d="M7.60001 13.5111V6.40002L13.8222 9.95558L7.60001 13.5111Z" fill="#FFBD00" />
             </svg>
         </button>
-        <button id="stopButton" class="Pause-Button-SVG" >
+        <button id="stopButton" class="Player-Button-Motion Pause-SVG" >
             <!-- PAUSE BUTTON -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
                 <rect class="svg_bg_2" width="20" height="20" rx="5" fill="#FFBD00" data-active="true"/>
@@ -352,52 +310,10 @@
             </svg>
         </button>
     </div>
-    <!-- <div class="legend-player">
-        <button id="playButton" class="Player-Button">播放</button>
-        <button id="stopButton" class="Player-Button">暫停</button>
-    </div> -->
-
-    <!-- orignal -->
-
-    <!-- <div class="floating-ui">
-    <button id="collapseBtn">[-]</button>
-    <button id="expandBtn" style="display: none;">[+]</button> -->
 
 
-    <!-- <div class="legend">
-      <button id="playButton" class="legend-item">Play</button>
-      <button id="stopButton" class="legend-item">Stop</button> -->
-    <!-- <p  class="legend-item"><b>點擊播放，觀察各時段車輛數</b></p> -->
-    <!-- <b><div id="timeIndexDisplay" class="legend-item">Current Time</div></b>
-        <div id="countDisplay" class="legend-item">可借狀況</div> -->
-    <!-- <div id="finishDisplay" class="legend-item">可還狀況</div> -->
-    </div>
+    <!-- Popup Panel -->
 
-    <!-- <div class="legend"> 
-
-        <div class="legend-item">
-            <div class="color-box color1"></div>
-            <label class="legend-item-click" data-status="s2" data-active="true">2車以上</label>
-          </div>
-          <div class="legend-item">
-            <div class="color-box color5"></div>
-            <label class="legend-item-click"  data-status="s1" data-active="true">僅1車</label>
-          </div>
-          <div class="legend-item">
-            <div class="color-box color6"></div>
-            <label class="legend-item-click" data-status="s0" data-active="true">無車</label>
-          </div>
-        <div class="legend-item">
-            <div class="color-box color7"></div>
-            <label class="legend-item-click" data-status="ss" data-active="true">暫停營運</label>
-          </div>
-
-    </div> -->
-
-
-    </div>
-
-    <div id="mapid"></div>
     <div id="customTooltip">
         <button id="closeTooltip" style="float: right;">X</button>
         <!-- 在这里添加您想显示的内容 -->
@@ -406,13 +322,18 @@
     </div>
 
 
+    <!-- Map -->
 
+    <div id="mapid"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
+</body>
 
-    <script>
+<body> <!-- Main Map JS  -->
+
+    <script> // Map indepth JS
         var mymap = L.map('mapid').setView([25.0430, 121.5584], 13);
 
         //https://api.mapbox.com/styles/v1/trdesigners/clu0ykowm024c01pteflt5emt/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoidHJkZXNpZ25lcnMiLCJhIjoiY2wzMnZrb3NlMGg1bzNkbjMwMXcyNGdqaSJ9.Lu_l-YQvvcLymn7fRLD5LA
@@ -1051,42 +972,32 @@
 
             }//complete
         });//////papaparse
+    </script>
 
-
-
-
-
-
+    <script> //set map dots color
         function getColorByValue(value, status, available_spaces) {
 
             //getComputedStyle(document.querySelector('.color1')).color
 
             if (status == 2) {
-                return getComputedStyle(document.querySelector('.color4')).color;; //'#333'
+                return getComputedStyle(document.documentElement).getPropertyValue('--color04'); //'#333'
             }
             else if (available_spaces == 1) {
-                return getComputedStyle(document.querySelector('.color2')).color;; //'#800026'
+                return getComputedStyle(document.documentElement).getPropertyValue('--color02'); //'#800026'
             }
             else {
                 if (value > 0) {
-                    return getComputedStyle(document.querySelector('.color1')).color; //'rgba(0, 0, 255, 0.5)'
+                    return getComputedStyle(document.documentElement).getPropertyValue('--color01'); //'rgba(0, 0, 255, 0.5)'
                 }
                 else {
-                    return getComputedStyle(document.querySelector('.color3')).color;; //'#FF60AF'
+                    return getComputedStyle(document.documentElement).getPropertyValue('--color03'); //'#FF60AF'
                 }
             }
 
         }
+    </script>
 
-
-
-
-
-
-
-
-
-
+    <script> // commented
         ///////////////////
 
 
@@ -1196,6 +1107,9 @@
         // }
 
         //
+    </script>
+
+    <script> // resize map
         function resizeMap() {
             var windowHeight = window.innerHeight; // 獲取當前視窗的高度
             var newHeight = windowHeight * 0.8; // 計算地圖高度為視窗高度的80%
@@ -1205,10 +1119,6 @@
 
         // 當視窗大小變化時，重新設定地圖高度
         window.onresize = resizeMap;
-
-
-
-
 
         document.getElementById('collapseBtn').addEventListener('click', function () {
             var floatingUI = document.querySelector('.floating-ui');
@@ -1224,10 +1134,6 @@
             document.getElementById('expandBtn').style.display = 'block'; // 显示 [+] 按钮
         });
 
-
-
-
-
         document.getElementById('expandBtn').addEventListener('click', function () {
             var floatingUI = document.querySelector('.floating-ui');
             floatingUI.style.width = '80%'; // 恢复原始宽度
@@ -1239,14 +1145,8 @@
             });
             this.style.display = 'none'; // 隐藏 [+] 按钮
         });
-
-
-
-
-
-
-
     </script>
+
 </body>
 
 </html>
