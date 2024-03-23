@@ -8,7 +8,7 @@
 
     <style> /* Master */
 
-        body { margin: 0px; }
+        body { margin: 0px; background-color: #F1F1F1; font-family: Roboto Slab, Noto Sans TC;}
         #mapid { width: 100%; height: 90vh; }
 
         :root {
@@ -16,10 +16,10 @@
             --color02 : #FFBD00;
             --color03 : #fb2b06;
             --color04 : #FFF;
-            --color-main-01 : #FFBD00;
-            --color-main-02 : #ffbb0080;
-            --color-minor-01 :  #FFFFFF;
-            --color-minor-02 :  #ffffff80;
+            --color-major-1 : #FFBD00;
+            --color-major-2 : #ffbb00aa;
+            --color-minor-1 :  #ffffffcc;
+            --color-minor-2 :  #ffffff50;
         }
 
     </style>
@@ -32,42 +32,68 @@
             bottom: 12%;
             left: 15px;
         }
-
         .Player-Button-Motion {
             display: flex;
-            transition-duration: 0.3s;
+            transition-duration: 1s;
             border-style: none;
-            background: none;
             width: 2.5rem;
             height: auto;
             margin-top: 0.5rem;
             padding: 0rem;
             border-radius: 10px;
-            opacity: 0.75;
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
+            border-style: solid;
         }
         .Player-Button-Motion:hover {
             cursor: pointer;
             box-shadow: 3px 3px 8px #00000010;
-            opacity: 1;
-            border-radius: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            box-shadow: inset #ffffff70 0px 0px 10px 0px;
         }
 
-        .Play-SVG{
-            background: var(--color-minor-01);
+        #playButton {
+            transition-duration: 0.5s;
+            background: var(--color-minor-2);
+            fill: var(--color-major-1);
+            border-width: 2px;
+            border-color: var(--color-minor-2);
         }
-        .Pause-SVG {
+        #stopButton {
+            background: var(--color-minor-2);
+            fill: var(--color-major-1);
+            border-width: 2px;
+            border-color: var(--color-major-1);
+        }
 
+        #playButton[data-active="true"],  #stopButton[data-active="true"]{
+            background: var(--color-minor-2);
+            fill: var(--color-major-1);
+            border-width: 2px;
+            border-color: var(--color-major-1);
+        }
+        #playButton[data-active="false"], #stopButton[data-active="false"]{
+            background: var(--color-minor-2);
+            fill: var(--color-major-1);
+            border-width: 2px;
+            border-color: var(--color-minor-2);
+        }
+        #playButton[data-active="true"]:hover,  #stopButton[data-active="true"]:hover{
+            background: var(--color-minor-2);
+            fill: var(--color-major-1);
+            border-width: 2px;
+            border-color: var(--color-major-1);
+        }
+        #playButton:hover, #stopButton:hover, #playButton[data-active="false"]:hover,  #stopButton[data-active="false"]:hover{
+            background: var(--color-major-1);
+            fill: var(--color-minor-1);
+            border-width: 2px;
+            border-color: var(--color-major-1);
+            box-shadow: inset #ffffff00 0px 0px 10px 0px;
         }
 
-        .svg_bg[data-active="true"] {
-            background: white;
-        }
-
-        .svg_bg[data-active="false"] {
-            background: #000;
-        }
 
 
         .top-legend {
@@ -93,15 +119,22 @@
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
-            font-family: Roboto Slab, Noto Sans TC;
             font-weight: 400;
             font-size: 0.8rem;
-            color: #000000;
+            color: #4A4A4A;
             line-height: 1.1;
-            letter-spacing: 0.025rem;
+            letter-spacing: 0.05rem;
+            background-color: #FFFFFF50;
+            padding: 5px 7px 5px 7px;
+            border-radius: 5px;
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            box-shadow: 3px 3px 8px #00000010;
+            box-shadow: inset #ffffffaa 0px 0px 10px 0px;
+            /* text-shadow: #00000080 1px 1px 3px; */
         }
 
-        .time-date {
+        .current-time {
             /* position: absolute; */
             z-index: 1000;
             display: flex;
@@ -109,9 +142,8 @@
             left: 50%;
             text-align: center;
             /* width: 300px; */
-            font-family: Roboto Slab, Noto Sans TC;
             font-weight: 300;
-            font-size: 2.5rem;
+            font-size: 4rem;
             color: #000000;
             line-height: 1.1;
             letter-spacing: 0.025rem;
@@ -135,7 +167,6 @@
             cursor: pointer;
             display: inline-block;
             /* 確保padding有效 */
-            font-family: Roboto Slab, Noto Sans TC;
             font-weight: 400;
             font-size: 1.1rem;
             line-height: 1;
@@ -145,11 +176,6 @@
             border-radius: 5px;
             margin: 3px;
         }
-
-        .color1 { color: #CDCDCD; }
-        .color2 { color: #FFBD00; }
-        .color3 { color: #fb2b06; }
-        .color4 { color: #FFF; }
 
         .legend-item-click {
             cursor: pointer;
@@ -192,33 +218,74 @@
         } */
     </style> 
 
-    <style> /* Popup Panel */
+    <style> /* Popup Tooltip */
         #customTooltip {
             /* 示例样式 */
             box-shadow: 3px 3px 8px #00000035;
             border-radius: 8px;
-            padding: 20px;
+            padding: 0.8rem;
             border-style: none;
             display: none;
             position: absolute;
             width: 80%;
-            height: 80%;
-            top: 10%;
-            bottom: 10%;
-            left: 10%;
-            right: 10%;
+            height: auto;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -40%);
             background-color: #ffffff6e;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             z-index: 1000;
             overflow: auto;
         }
-
-        #showinfo {
-            font-family: Roboto Slab, Noto Sans TC;
-            font-weight: 400;
-            font-size: 1.1rem;
+        #closeTooltip{
+            cursor: pointer;
+            position: absolute;
+            width: 15px;
+            height: auto;
+            right: 0.8rem;
+            z-index: 1000;
+            border-radius: 5px;
+            border-style: none;
+            padding: 0rem;
+            stroke: #000;
+            stroke-width: 0.3px;
+            background: none;
         }
+        .Tooltop-Top {
+            display: inline-block;
+            align-items: center;
+        }
+
+        #showInfo {
+            /* position: absolute; */
+            font-weight: 600;
+            font-size: 1.5rem;
+            text-align: center;
+            align-items: center;
+        }
+        #inner_status{
+            display: inline;
+            position: absolute;
+            top: 0rem;
+            font-size: 2.5rem;
+            line-height: -1rem;
+        }
+        #level{
+            margin: 0.5rem 0 0.5rem 0;
+        }
+        
+        .Tooltop-Bottom {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #inner_empty, #inner_available{
+            vertical-align: bottom;
+        }
+        #inner_time, #inner_date{
+            text-align: right;
+        }
+
     </style>
 
     <style> /* commented old version*/
@@ -289,24 +356,23 @@
                 <label data-status="ss" data-active="true" style="color: var(--color04)">⬤</label> 暫停營運
             </label>
         </div>
-        <div id="timeIndexDisplay" class="time-date">Current Time</div>
+        <div id="timeIndexDisplay" class="current-time">Current Time</div>
     </div>
 
     <div id="dateIndexDisplay" class="date">[ Current Date ]</div>
 
     <div class="legend-player">
-        <button id="playButton" class="Player-Button-Motion Play-SVG">
-            <!-- PLAY BUTTON -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
-                <path d="M7.60001 13.5111V6.40002L13.8222 9.95558L7.60001 13.5111Z" fill="#FFBD00" />
+        <button id="stopButton" class="Player-Button-Motion" >
+            <!-- PAUSE BUTTON -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <rect x="7.20001" y="6.80005" width="1.6" height="6.4"/>
+                <rect x="11.2" y="6.80005" width="1.6" height="6.4"/>
             </svg>
         </button>
-        <button id="stopButton" class="Player-Button-Motion Pause-SVG" >
-            <!-- PAUSE BUTTON -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
-                <rect class="svg_bg_2" width="20" height="20" rx="5" fill="#FFBD00" data-active="true"/>
-                <rect x="7.20001" y="6.80005" width="1.6" height="6.4" fill="white" />
-                <rect x="11.2" y="6.80005" width="1.6" height="6.4" fill="white" />
+        <button id="playButton" class="Player-Button-Motion">
+            <!-- PLAY BUTTON -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path  d="M7.60001 13.5111V6.40002L13.8222 9.95558L7.60001 13.5111Z"/>
             </svg>
         </button>
     </div>
@@ -315,16 +381,37 @@
     <!-- Popup Panel -->
 
     <div id="customTooltip">
-        <button id="closeTooltip" style="float: right;">X</button>
+        <button id="closeTooltip">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5">
+                <line y1="-0.25" x2="6.68977" y2="-0.25" transform="matrix(-0.664364 0.747409 -0.664364 -0.747409 4.44446 0)"/>
+                <line y1="-0.25" x2="6.68977" y2="-0.25" transform="matrix(-0.664364 -0.747409 0.664364 -0.747409 5 5)"/>
+                </svg>
+        </button>
         <!-- 在这里添加您想显示的内容 -->
-        <div id="showInfo"></div>
-        <div id="level"></div>
-        <div id="inner_available"></div>
-        <div id="inner_empty"></div>
-        <div id="inner_date"></div>
-        <div id="inner_time"></div>
         <div id="inner_status"></div>
+        <div class="Tooltop-Top">
+            <div id="showInfo"></div>
+            <div id="level"></div>
+        </div>
 
+        <table class="Tooltop-Bottom">
+            <tr>
+                <td style="display: flex;">
+                    <div>可還柱數 / 總柱數｜</div>
+                    <div id="inner_empty"></div>
+                </td> 
+                <td id="inner_time"></td>
+            </tr>
+            <tr style="width:40%;">
+                <td style="display: flex;">
+                    <div style="text-align: right;">可借車數｜</div>
+                    <div id="inner_available"></div>
+                </td> 
+                <td id="inner_date"></td>
+            </tr>
+        </table>
+
+        
     </div>
 
 
@@ -529,13 +616,14 @@
                                 // document.getElementById('customTooltip').appendChild(img);
                                 document.getElementById('level').innerHTML = "<img src='" + imageUrl + "' style='width:100%'>";
                                 document.getElementById('showInfo').innerHTML = point.name_tw;
-                                document.getElementById('inner_available').innerHTML = "可借車數：" + Math.floor(point.available_spaces);
-                                document.getElementById('inner_empty').innerHTML = "可還柱數／總柱數：" + Math.floor(point.empty_spaces) + "／" + Math.floor(point.parking_spaces);
-                                document.getElementById('inner_date').innerHTML = "日期：" + point.time_every_min.split(" ")[0];
-                                document.getElementById('inner_time').innerHTML = "時間：" + point.time_every_min.split(" ")[1].slice(0,5);
+                                document.getElementById('inner_available').innerHTML = "" + Math.floor(point.available_spaces);
+                                document.getElementById('inner_empty').innerHTML = "" + Math.floor(point.empty_spaces) + " / " + Math.floor(point.parking_spaces);
+                                document.getElementById('inner_date').innerHTML = "" + point.time_every_min.split(" ")[0];
+                                document.getElementById('inner_time').innerHTML = "" + point.time_every_min.split(" ")[1].slice(0,5);
                                 c = getColorByValue(point.level, point.status, point.available_spaces);
                                 s = getStatus(point.level, point.status, point.available_spaces);
-                                document.getElementById('inner_status').innerHTML = "<div style='display: flex;'><div style='color: "+c +"'>⬤</div><div>"+s+"</div></div>";
+                                document.getElementById('inner_status').innerHTML = "<div style='display: flex;'><div style='color: "+c +"'>⬤</div></div>";
+                                // document.getElementById('inner_status').innerHTML = "<div style='display: flex;'><div style='color: "+c +"'>⬤</div><div>"+s+"</div></div>";
                                 
 
                 
@@ -740,6 +828,8 @@
                         // console.log("here");
                         // console.log(currentTimeIndex);
                     }, 1000); // 1000毫秒=1秒
+
+                    
                 }
 
                 // 函数：停止自动播放
@@ -756,13 +846,17 @@
                 // 修改播放按钮事件处理，以开始自动播放
                 document.getElementById('playButton').onclick = function () {
                     startAutoPlay();
-
+                    document.getElementById('playButton').setAttribute('data-active', true);
+                    document.getElementById('stopButton').setAttribute('data-active', false);
                 };
 
                 // 为停止按钮添加事件处理，以停止自动播放
                 document.getElementById('stopButton').onclick = function () {
                     stopAutoPlay();
+                    document.getElementById('stopButton').setAttribute('data-active', true);
+                    document.getElementById('playButton').setAttribute('data-active', false);
                 };
+
 
               
 
