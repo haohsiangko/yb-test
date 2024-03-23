@@ -25,8 +25,22 @@
             bottom: 12%;
             left: 15px;
         }
-
-        .Player-Button-SVG {
+        
+        .Play-Button-SVG {
+            display: flex;
+            transition-duration: 0.3s;
+            border-style: none;
+            background: none;
+            width: 2.5rem;
+            height: auto;
+            margin-top: 0.5rem;
+            padding: 0rem;
+            border-radius: 10px;
+            opacity: 0.75;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        .Pause-Button-SVG {
             display: flex;
             transition-duration: 0.3s;
             border-style: none;
@@ -49,13 +63,10 @@
 
         .svg_bg[data-active="true"] {
             background: white;
-
         }
 
         .svg_bg[data-active="false"] {
-            
             background: #000;
-
         }
 
 
@@ -148,51 +159,47 @@
         }
 
         .color4 {
-            color: #FFFFFF;
+            color: #FFF;
         }
 
         .legend-item-click {
             cursor: pointer;
             /* 改變鼠標指針，增強可點擊的視覺效果 */
-            transition: background-color 0.5s, color 0.5s, opacity 0.5s, border-radius 0.5s;
+            transition: background-color 0.5s, color 0.5s, opacity 0.5s, border-radius 0.75s;
             /* 添加過渡動畫使顏色變化更平滑 */
-            background: #ffffff60;
+            border-radius: 10px;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            /* border-style: solid;
+            border-width: 2px; */
         }
-
         .legend-item-click:hover {
-            background: #ffffffcc;
-            color: #000000;
+            background: #ffffff85;
+            color: #000;
             backdrop-filter: blur(3px);
             -webkit-backdrop-filter: blur(3px);
             box-shadow: 3px 3px 8px #00000010;
             border-radius: 20px;
         }
-
-        .legend-item-click:active {
-            background: #FFFFFF;
-            color: #000000;
-            opacity: 0.25;
-        }
-
         .legend-item-click[data-active="true"] {
             text-decoration: none;
             /* 或者是勾選時的特殊樣式 */
             /* 其他勾選時的樣式 */
-            background: #ffffff60;
-
-
         }
-
         .legend-item-click[data-active="false"] {
             text-decoration: line-through;
             /* 或者是未勾選時的特殊樣式 */
             /* 其他未勾選時的樣式 */
-            background: #000;
-            color: #fff;
-
+            /* background: #00000060; */
+            color: #00000050;
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
         }
+        /* .legend-item-click:active {
+            background: #FFFFFF;
+            color: #000000;
+            opacity: 0.25;
+        } */
 
         #customTooltip {
             /* 示例样式 */
@@ -221,37 +228,6 @@
             font-size: 1.1rem;
         }
 
-        /* .Player-Button{
-            display: flex;
-            transition-duration: 0.3s;
-            padding: 5px 10px 8px 10px;
-            border-style:none ;
-            border-radius: 3px;
-            background-color: #FFFFFF;
-            font-family: Roboto Slab, Noto Sans TC;
-            font-weight: 400;
-            font-size: 0.8rem;
-            letter-spacing: 0.025rem;
-            color: #000000;
-            margin-top: 10px;
-        }
-        .Player-Button:hover{
-            cursor: pointer;
-            background-color: #000000;
-            color: #FFFFFF;
-        } */
-        /* .legend-item-click:focus{
-            background: #CDCDCD;
-            color: #FFFFFF;
-        } */
-        /* .color-box {
-            display: inline-block;
-            border-radius: 50%;
-            width: 0.95rem;
-            height: 0.95rem;
-            margin:-0.15rem -0.1rem -0.15rem -0.15rem ;
-        } */
-
 
 
         /* original code (not reference to) */
@@ -273,22 +249,6 @@
             /* Display legend items inline with space */
         }
 
-        /* .color-box {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        margin-right: 5px;
-        } */
-
-        /* .color1 { background-color: rgba(0, 0, 255, 0.5); }
-        .color2 { background-color: #0080FF; }
-        .color3 { background-color: #3CB371; }
-        .color4 { background-color: #EA7500; }
-        .color5 { background-color: #800026; }
-        .color6 { background-color: #FF60AF; }
-        .color7 { background-color: #333; } */
-
-
         .floating-ui {
             position: absolute;
             top: 0;
@@ -303,8 +263,6 @@
             border-radius: 5px;
             /* pointer-events: none; */
         }
-
-
 
         #collapseBtn,
         #expandBtn {
@@ -378,14 +336,14 @@
     <div id="timeIndexDisplay" class="date">[ Current Date ]</div>
 
     <div class="legend-player">
-        <button id="playButton" class="Player-Button-SVG">
+        <button id="playButton" class="Play-Button-SVG">
             <!-- PLAY BUTTON -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
                 <rect class="svg_bg_1" width="20" height="20" rx="5" fill="white" data-active="true"/>
                 <path d="M7.60001 13.5111V6.40002L13.8222 9.95558L7.60001 13.5111Z" fill="#FFBD00" />
             </svg>
         </button>
-        <button id="stopButton" class="Player-Button-SVG" >
+        <button id="stopButton" class="Pause-Button-SVG" >
             <!-- PAUSE BUTTON -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
                 <rect class="svg_bg_2" width="20" height="20" rx="5" fill="#FFBD00" data-active="true"/>
