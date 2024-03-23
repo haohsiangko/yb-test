@@ -228,23 +228,33 @@
             display: none;
             position: absolute;
             width: 80%;
-            height: auto%;
-            top: 10%;
-            bottom: 10%;
-            left: 10%;
-            right: 10%;
+            height: auto;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -40%);
             background-color: #ffffff6e;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             z-index: 1000;
             overflow: auto;
+        }
+        #closeTooltip{
+            cursor: pointer;
+            position: absolute;
+            width: 15px;
+            height: auto;
+            right: 0.8rem;
+            z-index: 1000;
+            border-radius: 5px;
+            border-style: none;
+            padding: 0rem;
+            stroke: #000;
+            stroke-width: 0.3px;
+            background: none;
         }
         .Tooltop-Top {
             display: inline-block;
             align-items: center;
-        }
-        .Tooltop-Bottom {
-            width: 100%;
         }
 
         #showInfo {
@@ -252,7 +262,7 @@
             font-weight: 600;
             font-size: 1.5rem;
             text-align: center;
-            margin-top: -1.5rem;
+            align-items: center;
         }
         #inner_status{
             display: inline;
@@ -264,17 +274,15 @@
         #level{
             margin: 0.5rem 0 0.5rem 0;
         }
-
-        #inner_empty{
-            
+        
+        .Tooltop-Bottom {
+            width: 100%;
+            border-collapse: collapse;
         }
-        #inner_available{
-            text-align: right;
+        #inner_empty, #inner_available{
+            vertical-align: bottom;
         }
-        #inner_date{
-
-        }
-        #inner_time{
+        #inner_time, #inner_date{
             text-align: right;
         }
 
@@ -373,7 +381,12 @@
     <!-- Popup Panel -->
 
     <div id="customTooltip">
-        <button id="closeTooltip" style="float: right;">X</button>
+        <button id="closeTooltip">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5">
+                <line y1="-0.25" x2="6.68977" y2="-0.25" transform="matrix(-0.664364 0.747409 -0.664364 -0.747409 4.44446 0)"/>
+                <line y1="-0.25" x2="6.68977" y2="-0.25" transform="matrix(-0.664364 -0.747409 0.664364 -0.747409 5 5)"/>
+                </svg>
+        </button>
         <!-- 在这里添加您想显示的内容 -->
         <div id="inner_status"></div>
         <div class="Tooltop-Top">
@@ -383,17 +396,22 @@
 
         <table class="Tooltop-Bottom">
             <tr>
-                <td style="display: flex; vertical-align: bottom;">
-                    <div>可還柱數 / 總柱數</div>
+                <td style="display: flex;">
+                    <div>可還柱數 / 總柱數｜</div>
                     <div id="inner_empty"></div>
                 </td> 
-                <td id="inner_available"></td>
-            </tr>
-            <tr>
-                <td id="inner_date"></td>
                 <td id="inner_time"></td>
             </tr>
+            <tr style="width:40%;">
+                <td style="display: flex;">
+                    <div style="text-align: right;">可借車數｜</div>
+                    <div id="inner_available"></div>
+                </td> 
+                <td id="inner_date"></td>
+            </tr>
         </table>
+
+        
     </div>
 
 
