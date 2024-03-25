@@ -469,7 +469,7 @@
                 // console.log(data);
 
 
-                var currentTimeIndex = 0;
+                var currentTimeIndex = 360;
 
                 var markers = {};
 
@@ -800,7 +800,7 @@
 
                 }//drawPointsForTime
 
-                drawPointsForTime(0);
+                drawPointsForTime(360);
 
 
                 // 初始化一个变量来存储 setInterval 的引用
@@ -819,7 +819,7 @@
                         // console.log(currentTimeIndex)
 
 
-                        // console.log("每秒刷新");
+                        console.log("每秒刷新");
                         // console.log(labelStates);
 
                         //
@@ -827,7 +827,7 @@
                         currentTimeIndex = (currentTimeIndex + 10) % 1440;
                         // console.log("here");
                         // console.log(currentTimeIndex);
-                    }, 1000); // 1000毫秒=1秒
+                    }, 500); // 1000毫秒=1秒
 
                     
                 }
