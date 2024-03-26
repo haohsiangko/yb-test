@@ -150,15 +150,14 @@
 
         .current-time {
             display: flex;
-            top: 45px;
             left: 50%;
             text-align: center;
             font-weight: 300;
-            font-size: 4rem;
+            font-size: 3.75rem;
             color: #000000;
-            line-height: 1.1;
+            line-height: 1;
             letter-spacing: 0.025rem;
-            margin: -0.3rem;
+            margin: -0.4rem;
         }
 
 
@@ -171,16 +170,25 @@
             cursor: pointer;
             display: inline-block;
             /* 確保padding有效 */
-            font-weight: 400;
-            font-size: 1.1rem;
+            font-weight: 600;
+            font-size: 1rem;
             line-height: 1;
-            color: #000000;
+            color: #333;
             padding: 0.5rem 0.7rem 0.5rem 0.7rem;
             letter-spacing: 0.025rem;
             border-radius: 5px;
             margin: 3px;
+            vertical-align: middle;
         }
-
+        .legend-box {
+            display: inline-block;
+            width: 0.95rem;
+            height: 0.95rem;
+            border-radius: 0.5rem;
+            background: #000;
+            vertical-align: bottom;
+            border: solid #ffffff00 1px;
+        }
         .legend-item-click {
             cursor: pointer;
             /* 改變鼠標指針，增強可點擊的視覺效果 */
@@ -350,16 +358,16 @@
     <div class="top-legend">
         <div class="legend-group">
             <label class="legend-text legend-item-click" data-status="s2" data-active="true">
-                <label data-status="s2" data-active="true" style="color: var(--color01)">⬤</label> 2車以上
+                <div class="legend-box" data-status="s2" data-active="true" style="background-color: var(--color01);"></div> 2車以上
             </label>
             <label class="legend-text legend-item-click" data-status="s1" data-active="true">
-                <label -data-status="s1" data-active="true" style="color: var(--color02)">⬤</label> 僅1車
+                <div class="legend-box" data-status="s1" data-active="true" style="background-color: var(--color02);"></div> 僅1車
             </label>
             <label class="legend-text legend-item-click" data-status="s0" data-active="true">
-                <label data-status="s0" data-active="true" style="color: var(--color03)">⬤</label> 無車
+                <div class="legend-box" data-status="s0" data-active="true" style="background-color: var(--color03);"></div> 無車
             </label>
             <label class="legend-text legend-item-click" data-status="ss" data-active="true">
-                <label data-status="ss" data-active="true" style="color: var(--color04)">⬤</label> 暫停營運
+                <div class="legend-box" data-status="ss" data-active="true" style="background-color: var(--color04);"></div> 暫停營運
             </label>
         </div>
         <div id="timeIndexDisplay" class="current-time">00:00</div>
@@ -613,7 +621,8 @@
                                 if (window.innerWidth > widthThreshold) {
                                     imageUrl = 'https://haohsiangko.github.io/yb-test/data_clean/2024-03-05/desktop/chart_' + Math.floor(point.station_no) + ".png"; // 桌面版链接 chart_500101001.png
                                 } else {
-                                    imageUrl = 'https://haohsiangko.github.io/yb-test/data_clean/2024-03-05/mobile/chart_m_' + Math.floor(point.station_no) + ".png"; // 桌面版链接 chart_500101001.png
+                                    imageUrl = 'https://haohsiangko.github.io/yb-test/data_clean/2024-03-05/desktop/chart_' + Math.floor(point.station_no) + ".png";
+                                    //imageUrl = 'https://haohsiangko.github.io/yb-test/data_clean/2024-03-05/mobile/chart_m_' + Math.floor(point.station_no) + ".png"; // 桌面版链接 chart_500101001.png
                                     // imageUrl = 'https://haohsiangko.github.io/yb-test/data_clean/2024-02-19/' + data.img2_m; // 手机版链接
                                 }
 
