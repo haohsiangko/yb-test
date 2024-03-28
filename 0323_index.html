@@ -6,9 +6,20 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+
     <style> /* Master */
 
-        body { margin: 0px; background-color: #F1F1F1; font-family: Roboto Slab, Noto Sans TC;}
+        body { 
+            margin: 0px;
+            background-color: #F1F1F1; 
+            font-family: Roboto Slab, Noto Sans TC; 
+            -webkit-font-family: Roboto Slab, Noto Sans TC; 
+            font-optical-sizing: auto;
+        }
+
         #mapid { width: 100%; height: 90vh; }
 
         :root {
@@ -20,6 +31,7 @@
             --color-major-2 : #ffbb00aa;
             --color-minor-1 :  #ffffffcc;
             --color-minor-2 :  #ffffff50;
+            --player-size : 35px;
         }
 
     </style>
@@ -29,17 +41,20 @@
             position: absolute;
             z-index: 1000;
             display: inline;
-            bottom: 12%;
-            left: 15px;
+            top: 80vh;
+            transform: translateY(-115px);
+            left: 10px;
         }
         .Player-Button-Motion {
             display: flex;
             transition-duration: 1s;
             border-style: none;
-            width: 2.5rem;
-            height: auto;
-            margin-top: 0.5rem;
-            padding: 0rem;
+            /* width: 40px;
+            height: 40px; */
+            width: 100%;
+            height: 100%;
+            margin-top: 10px;
+            padding: 1px;
             border-radius: 10px;
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
@@ -108,16 +123,17 @@
             display: inline-flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 5px;       
+            width: 70vw;
         }
 
         .date {
             position: absolute;
             z-index: 1000;
             display: flex;
-            bottom: 12%;
+            top: 80vh;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, -40px);
             text-align: center;
             font-weight: 400;
             font-size: 0.8rem;
@@ -135,46 +151,45 @@
         }
 
         .current-time {
-            /* position: absolute; */
-            z-index: 1000;
             display: flex;
-            top: 45px;
             left: 50%;
             text-align: center;
-            /* width: 300px; */
             font-weight: 300;
-            font-size: 4rem;
+            font-size: 3.75rem;
             color: #000000;
-            line-height: 1.1;
+            line-height: 1;
             letter-spacing: 0.025rem;
-            margin: -0.3rem;
+            margin: -0.4rem;
         }
-
 
         .legend-group {
-            /* position: absolute; */
-            z-index: 1000;
-            top: 7px;
-            left: 50%;
-            /* display: flex;
-            gap: 5px; */
-            display: inline-table;
-            align-items: center;
-            justify-content: center;
+            display: inline-block;
+            text-align: center;
         }
+
 
         .legend-text {
             cursor: pointer;
             display: inline-block;
             /* 確保padding有效 */
             font-weight: 400;
-            font-size: 1.1rem;
+            font-size: 1rem;
             line-height: 1;
-            color: #000000;
+            color: #333;
             padding: 0.5rem 0.7rem 0.5rem 0.7rem;
             letter-spacing: 0.025rem;
             border-radius: 5px;
             margin: 3px;
+            vertical-align: middle;
+        }
+        .legend-box {
+            display: inline-block;
+            width: 0.95rem;
+            height: 0.95rem;
+            border-radius: 0.5rem;
+            background: #000;
+            vertical-align: bottom;
+            border: solid #ffffff00 1px;
         }
 
         .legend-item-click {
@@ -216,6 +231,27 @@
             color: #000000;
             opacity: 0.25;
         } */
+
+        @media(max-width: 768px) {
+            .top-legend { 
+                width: 50vw;
+            }
+            .legend-text {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+            }
+            .legend-box {
+                width: 0.75rem;
+                height: 0.75rem;
+            }
+            .current-time {
+                font-size: 3rem;
+                margin: -0.3rem;
+            }
+            .date {
+                font-size: 0.7rem;
+            }
+        }
     </style> 
 
     <style> /* Popup Tooltip */
@@ -228,7 +264,8 @@
             display: none;
             position: absolute;
             width: 80%;
-            height: auto;
+            max-width: 1000px;
+            max-height: 80%;
             top: 40%;
             left: 50%;
             transform: translate(-50%, -40%);
@@ -241,7 +278,7 @@
         #closeTooltip{
             cursor: pointer;
             position: absolute;
-            width: 15px;
+            width: 10px;
             height: auto;
             right: 0.8rem;
             z-index: 1000;
@@ -255,6 +292,7 @@
         .Tooltop-Top {
             display: inline-block;
             align-items: center;
+            margin-top: -0.2rem;
         }
 
         #showInfo {
@@ -267,9 +305,10 @@
         #inner_status{
             display: inline;
             position: absolute;
-            top: 0rem;
-            font-size: 2.5rem;
+            top: 0.5rem;
+            font-size: 1.5rem;
             line-height: -1rem;
+            /* text-shadow: 2px 2px 6px #00000010; */
         }
         #level{
             margin: 0.5rem 0 0.5rem 0;
@@ -278,6 +317,7 @@
         .Tooltop-Bottom {
             width: 100%;
             border-collapse: collapse;
+            font-size: 1rem;
         }
         #inner_empty, #inner_available{
             vertical-align: bottom;
@@ -285,7 +325,12 @@
         #inner_time, #inner_date{
             text-align: right;
         }
-
+        @media(max-width: 768px) {
+            #customTooltip { padding: 0rem; }
+            #showInfo { font-size: 1rem; }
+            #inner_status{ font-size: 1rem; }
+            .Tooltop-Bottom { font-size: 0.7rem; }
+        }
     </style>
 
     <style> /* commented old version*/
@@ -339,39 +384,39 @@
 <body> <!-- Main UI -->
 
     <!-- Overlay UI -->
-
     <div id="countDisplay" style="display: none;">可借狀況</div>
     <div class="top-legend">
         <div class="legend-group">
             <label class="legend-text legend-item-click" data-status="s2" data-active="true">
-                <label data-status="s2" data-active="true" style="color: var(--color01)">⬤</label> 2車以上
+                <div class="legend-box" data-status="s2" data-active="true" style="background-color: var(--color01);"></div> 2車以上
             </label>
             <label class="legend-text legend-item-click" data-status="s1" data-active="true">
-                <label -data-status="s1" data-active="true" style="color: var(--color02)">⬤</label> 僅1車
+                <div class="legend-box" data-status="s1" data-active="true" style="background-color: var(--color02);"></div> 僅1車
             </label>
             <label class="legend-text legend-item-click" data-status="s0" data-active="true">
-                <label data-status="s0" data-active="true" style="color: var(--color03)">⬤</label> 無車
+                <div class="legend-box" data-status="s0" data-active="true" style="background-color: var(--color03);"></div> 無車
             </label>
             <label class="legend-text legend-item-click" data-status="ss" data-active="true">
-                <label data-status="ss" data-active="true" style="color: var(--color04)">⬤</label> 暫停營運
+                <div class="legend-box" data-status="ss" data-active="true" style="background-color: var(--color04);"></div> 暫停營運
             </label>
         </div>
-        <div id="timeIndexDisplay" class="current-time">Current Time</div>
+        <div id="timeIndexDisplay" class="current-time">00:00</div>
     </div>
 
-    <div id="dateIndexDisplay" class="date">[ Current Date ]</div>
+    <div id="dateIndexDisplay" class="date">0000-00-00</div>
 
     <div class="legend-player">
         <button id="stopButton" class="Player-Button-Motion" >
             <!-- PAUSE BUTTON -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+            <!-- <div>Start</div> -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" overflow="visible" style="width: var(--player-size); height: var(--player-size);">
                 <rect x="7.20001" y="6.80005" width="1.6" height="6.4"/>
                 <rect x="11.2" y="6.80005" width="1.6" height="6.4"/>
             </svg>
         </button>
         <button id="playButton" class="Player-Button-Motion">
             <!-- PLAY BUTTON -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" overflow="visible" style="width: var(--player-size); height: var(--player-size);">
                 <path  d="M7.60001 13.5111V6.40002L13.8222 9.95558L7.60001 13.5111Z"/>
             </svg>
         </button>
@@ -379,10 +424,9 @@
 
 
     <!-- Popup Panel -->
-
     <div id="customTooltip">
         <button id="closeTooltip">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5" style="width: 10px; height: 10px;">
                 <line y1="-0.25" x2="6.68977" y2="-0.25" transform="matrix(-0.664364 0.747409 -0.664364 -0.747409 4.44446 0)"/>
                 <line y1="-0.25" x2="6.68977" y2="-0.25" transform="matrix(-0.664364 -0.747409 0.664364 -0.747409 5 5)"/>
                 </svg>
@@ -404,7 +448,7 @@
             </tr>
             <tr style="width:40%;">
                 <td style="display: flex;">
-                    <div style="text-align: right;">可借車數｜</div>
+                    <div>可借車數｜</div>
                     <div id="inner_available"></div>
                 </td> 
                 <td id="inner_date"></td>
@@ -607,6 +651,7 @@
                                 if (window.innerWidth > widthThreshold) {
                                     imageUrl = 'https://haohsiangko.github.io/yb-test/data_clean/2024-03-05/desktop/chart_' + Math.floor(point.station_no) + ".png"; // 桌面版链接 chart_500101001.png
                                 } else {
+                                    // imageUrl = 'https://haohsiangko.github.io/yb-test/data_clean/2024-03-05/desktop/chart_' + Math.floor(point.station_no) + ".png";
                                     imageUrl = 'https://haohsiangko.github.io/yb-test/data_clean/2024-03-05/mobile/chart_m_' + Math.floor(point.station_no) + ".png"; // 桌面版链接 chart_500101001.png
                                     // imageUrl = 'https://haohsiangko.github.io/yb-test/data_clean/2024-02-19/' + data.img2_m; // 手机版链接
                                 }
@@ -614,7 +659,7 @@
                                 // img.src = imageUrl; // 替换为您的图片 URL
                                 // img.style.width = '100%';
                                 // document.getElementById('customTooltip').appendChild(img);
-                                document.getElementById('level').innerHTML = "<img src='" + imageUrl + "' style='width:100%'>";
+                                document.getElementById('level').innerHTML = "<img src='" + imageUrl + "' style='width:100%;'>";
                                 document.getElementById('showInfo').innerHTML = point.name_tw;
                                 document.getElementById('inner_available').innerHTML = "" + Math.floor(point.available_spaces);
                                 document.getElementById('inner_empty').innerHTML = "" + Math.floor(point.empty_spaces) + " / " + Math.floor(point.parking_spaces);
