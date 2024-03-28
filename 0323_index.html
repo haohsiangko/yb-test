@@ -31,6 +31,7 @@
             --color-major-2 : #ffbb00aa;
             --color-minor-1 :  #ffffffcc;
             --color-minor-2 :  #ffffff50;
+            --player-size : 35px;
         }
 
     </style>
@@ -49,10 +50,10 @@
             display: flex;
             transition-duration: 1s;
             border-style: none;
-            width: 40px;
-            height: 40px;
+            /* width: 40px;
+            height: 40px; */
             margin-top: 10px;
-            padding: 0px;
+            padding: 1px;
             border-radius: 10px;
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
@@ -401,14 +402,14 @@
         <button id="stopButton" class="Player-Button-Motion" >
             <!-- PAUSE BUTTON -->
             <!-- <div>Start</div> -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" overflow="visible" style="width: 20px; height: 20px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" overflow="visible" style="width: var(--player-size); height: var(--player-size);">
                 <rect x="7.20001" y="6.80005" width="1.6" height="6.4"/>
                 <rect x="11.2" y="6.80005" width="1.6" height="6.4"/>
             </svg>
         </button>
         <button id="playButton" class="Player-Button-Motion">
             <!-- PLAY BUTTON -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" overflow="visible" style="width: 20px; height: 20px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" overflow="visible" style="width: var(--player-size); height: var(--player-size);">
                 <path  d="M7.60001 13.5111V6.40002L13.8222 9.95558L7.60001 13.5111Z"/>
             </svg>
         </button>
