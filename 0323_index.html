@@ -43,8 +43,7 @@
             display: inline;
             top: 80vh;
             transform: translateY(-115px);
-            left: 15px;
-            transform: ;
+            left: 10px;
         }
         .Player-Button-Motion {
             display: flex;
@@ -318,6 +317,7 @@
         .Tooltop-Bottom {
             width: 100%;
             border-collapse: collapse;
+            font-size: 1rem;
         }
         #inner_empty, #inner_available{
             vertical-align: bottom;
@@ -325,7 +325,11 @@
         #inner_time, #inner_date{
             text-align: right;
         }
-
+        @media(max-width: 768px) {
+            #showInfo { font-size: 1rem; }
+            #inner_status{ font-size: 1rem; }
+            .Tooltop-Bottom { font-size: 0.7rem; }
+        }
     </style>
 
     <style> /* commented old version*/
