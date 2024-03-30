@@ -648,7 +648,7 @@
                     document.getElementById('showInfo').innerHTML = point.name_tw;
                     document.getElementById('inner_available').innerHTML = `${Math.floor(point.available_spaces)}`;
                     document.getElementById('inner_empty').innerHTML = `${Math.floor(point.empty_spaces)} / ${Math.floor(point.parking_spaces)}`;
-                    document.getElementById('inner_date').innerHTML = point.time_every_min.split(" ")[0];
+                    document.getElementById('inner_date').innerHTML = point.time_every_min.split(" ")[0].slice(5, 10);
                     document.getElementById('inner_time').innerHTML = point.time_every_min.split(" ")[1].slice(0, 5);
 
                     let c = getColorByValue(point.level, point.status, point.available_spaces); // Assuming getColorByValue is defined elsewhere
