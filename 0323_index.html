@@ -38,7 +38,7 @@
             position: absolute;
             z-index: 1000;
             display: inline;
-            bottom: 12%;
+            bottom: 5%;
             left: 15px;
         }
 
@@ -261,7 +261,7 @@
             background-color: #ffffff6e;
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
-            z-index: 1000;
+            z-index: 2000;
             overflow: auto;
         }
 
@@ -395,73 +395,77 @@
 
     <div id="dateIndexDisplay" class="date">[ Current Date ]</div>
 
-    <div class="legend-player">
-        <button id="stopButton" class="Player-Button-Motion">
-            <!-- PAUSE BUTTON -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <rect x="7.20001" y="6.80005" width="1.6" height="6.4" />
-                <rect x="11.2" y="6.80005" width="1.6" height="6.4" />
-            </svg>
-        </button>
-        <button id="playButton" class="Player-Button-Motion">
-            <!-- PLAY BUTTON -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path d="M7.60001 13.5111V6.40002L13.8222 9.95558L7.60001 13.5111Z" />
-            </svg>
-        </button>
-    </div>
+   
 
 
     <!-- Popup Panel -->
 
-    <div id="customTooltip">
-        <button id="closeTooltip">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5">
-                <line y1="-0.25" x2="6.68977" y2="-0.25"
-                    transform="matrix(-0.664364 0.747409 -0.664364 -0.747409 4.44446 0)" />
-                <line y1="-0.25" x2="6.68977" y2="-0.25"
-                    transform="matrix(-0.664364 -0.747409 0.664364 -0.747409 5 5)" />
-            </svg>
-        </button>
-        <!-- 在这里添加您想显示的内容 -->
-        <div id="inner_status"></div>
-        <div class="Tooltop-Top">
-            <div id="showInfo"></div>
-            <div id="level"></div>
-        </div>
-
-        <table class="Tooltop-Bottom">
-            <tr>
-                <td style="display: flex;">
-                    <div>可還柱數 / 總柱數｜</div>
-                    <div id="inner_empty"></div>
-                </td>
-                <td id="inner_time"></td>
-            </tr>
-            <tr style="width:40%;">
-                <td style="display: flex;">
-                    <div style="text-align: right;">可借車數｜</div>
-                    <div id="inner_available"></div>
-                </td>
-                <td id="inner_date"></td>
-            </tr>
-            <tr>
-                <td style="display: flex;">
-                    <div>資料來源：台北市政府交通局、微笑單車；《報導者》每分鐘下載資料統計整理</div>
-                    <div ></div>
-                </td>
-                <td ></td>
-            </tr>
-           
-        </table>
-
-
-    </div>
+   
 
 
     <!-- Map -->
 
-    <div id="mapid"></div>
+    <div id="mapid">
+        <div class="legend-player">
+            <button id="stopButton" class="Player-Button-Motion">
+                <!-- PAUSE BUTTON -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <rect x="7.20001" y="6.80005" width="1.6" height="6.4" />
+                    <rect x="11.2" y="6.80005" width="1.6" height="6.4" />
+                </svg>
+            </button>
+            <button id="playButton" class="Player-Button-Motion">
+                <!-- PLAY BUTTON -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M7.60001 13.5111V6.40002L13.8222 9.95558L7.60001 13.5111Z" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="customTooltip">
+            <button id="closeTooltip">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5">
+                    <line y1="-0.25" x2="6.68977" y2="-0.25"
+                        transform="matrix(-0.664364 0.747409 -0.664364 -0.747409 4.44446 0)" />
+                    <line y1="-0.25" x2="6.68977" y2="-0.25"
+                        transform="matrix(-0.664364 -0.747409 0.664364 -0.747409 5 5)" />
+                </svg>
+            </button>
+            <!-- 在这里添加您想显示的内容 -->
+            <div id="inner_status"></div>
+            <div class="Tooltop-Top">
+                <div id="showInfo"></div>
+                <div id="level"></div>
+            </div>
+    
+            <table class="Tooltop-Bottom">
+                <tr>
+                    <td style="display: flex;">
+                        <div>可還柱數 / 總柱數｜</div>
+                        <div id="inner_empty"></div>
+                    </td>
+                    <td id="inner_time"></td>
+                </tr>
+                <tr style="width:40%;">
+                    <td style="display: flex;">
+                        <div style="text-align: right;">可借車數｜</div>
+                        <div id="inner_available"></div>
+                    </td>
+                    <td id="inner_date"></td>
+                </tr>
+                <tr>
+                    <td style="display: flex;">
+                        <div>資料來源：台北市政府交通局、微笑單車；《報導者》每分鐘下載資料統計整理</div>
+                        <div ></div>
+                    </td>
+                    <td ></td>
+                </tr>
+               
+            </table>
+    
+    
+        </div>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
