@@ -645,7 +645,7 @@
                     document.getElementById('inner_time').innerHTML = point.time_every_min.split(" ")[1].slice(0, 5);
 
                     let c = getColorByValue(point.level, point.status, point.available_spaces); // Assuming getColorByValue is defined elsewhere
-                    document.getElementById('inner_status').innerHTML = `<div style='display: flex;'><div style='color: ${c}'>⬤</div></div>`;
+                    document.getElementById('inner_status').innerHTML = `<div style='display: flex;font-size:1.5rem; '><div style='color: ${c}'>⬤</div></div>`;
 
                     // Show the custom tooltip
                     document.getElementById('customTooltip').style.display = 'block';
