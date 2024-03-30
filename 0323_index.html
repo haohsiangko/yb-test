@@ -47,7 +47,7 @@
             display: flex;
             transition-duration: 1s;
             border-style: none;
-            width: 2.5rem; 
+            width: 2.5rem;
             height: 2.5rem;
             margin-top: 0.5rem;
             padding: 0rem;
@@ -58,9 +58,11 @@
         }
 
         .Player-Button-Motion svg {
-    width: 100%;  /* 讓 SVG 充滿按鈕的寬度 */
-    height: auto; /* 保持 SVG 的寬高比 */
-}
+            width: 100%;
+            /* 讓 SVG 充滿按鈕的寬度 */
+            height: auto;
+            /* 保持 SVG 的寬高比 */
+        }
 
 
 
@@ -382,24 +384,7 @@
 
     <!-- Overlay UI -->
 
-    <div id="countDisplay" style="display: none;">可借狀況</div>
-    <div class="top-legend">
-        <div class="legend-group">
-            <label class="legend-text legend-item-click" data-status="s2" data-active="true">
-                <label data-status="s2" data-active="true" style="color: var(--color01)">⬤</label> 2車以上
-            </label>
-            <label class="legend-text legend-item-click" data-status="s1" data-active="true">
-                <label -data-status="s1" data-active="true" style="color: var(--color02)">⬤</label> 僅1車
-            </label>
-            <label class="legend-text legend-item-click" data-status="s0" data-active="true">
-                <label data-status="s0" data-active="true" style="color: var(--color03)">⬤</label> 無車
-            </label>
-            <label class="legend-text legend-item-click" data-status="ss" data-active="true">
-                <label data-status="ss" data-active="true" style="color: var(--color04)">⬤</label> 暫停營運
-            </label>
-        </div>
-        <div id="timeIndexDisplay" class="current-time">Current Time</div>
-    </div>
+
 
 
 
@@ -414,6 +399,24 @@
     <!-- Map -->
 
     <div id="mapid">
+        <div id="countDisplay" style="display: none;">可借狀況</div>
+        <div class="top-legend">
+            <div class="legend-group">
+                <label class="legend-text legend-item-click" data-status="s2" data-active="true">
+                    <label data-status="s2" data-active="true" style="color: var(--color01)">⬤</label> 2車以上
+                </label>
+                <label class="legend-text legend-item-click" data-status="s1" data-active="true">
+                    <label -data-status="s1" data-active="true" style="color: var(--color02)">⬤</label> 僅1車
+                </label>
+                <label class="legend-text legend-item-click" data-status="s0" data-active="true">
+                    <label data-status="s0" data-active="true" style="color: var(--color03)">⬤</label> 無車
+                </label>
+                <label class="legend-text legend-item-click" data-status="ss" data-active="true">
+                    <label data-status="ss" data-active="true" style="color: var(--color04)">⬤</label> 暫停營運
+                </label>
+            </div>
+            <div id="timeIndexDisplay" class="current-time">Current Time</div>
+        </div>
         <div class="legend-player">
             <button id="stopButton" class="Player-Button-Motion">
                 <!-- PAUSE BUTTON -->
