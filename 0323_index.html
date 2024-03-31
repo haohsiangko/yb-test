@@ -132,6 +132,8 @@
             z-index: 1000;
             top: 10px;
             left: 50%;
+            /*width: auto; */
+            /*height: 2.5rem;*/
             transform: translateX(-50%);
             /* display: table;
             flex-direction: column;
@@ -251,6 +253,17 @@
             color: #000000;
             opacity: 0.25;
         } */
+
+        @media (max-width: 600px) {
+            .current-time {
+                font-size: 2rem;
+                /* 较小的字体大小 */
+            }
+            .legend-text {
+                font-size: 0.8rem;
+            }
+
+        }
     </style>
 
     <style>
