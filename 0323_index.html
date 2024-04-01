@@ -340,9 +340,9 @@
             border-style: none;
             display: none;
             position: absolute;
-            width: 80%;
+            width: 50%;
             max-width: 1000px;
-            max-height: 80%;
+            max-height: 90%;
             top: 40%;
             left: 50%;
             transform: translate(-50%, -40%);
@@ -385,9 +385,9 @@
         #inner_status {
             display: inline;
             position: absolute;
-            top: 0.5rem;
+            top: 0.25rem;
             font-size: 1.5rem;
-            line-height: -1rem;
+            /* line-height: -1rem; */
             /* text-shadow: 2px 2px 6px #00000010; */
         }
 
@@ -401,21 +401,22 @@
             font-size: 1rem;
         }
 
-        #inner_empty,
-        #inner_available {
+        #inner_empty, #inner_available {
             vertical-align: bottom;
         }
 
-        #inner_time,
-        #inner_date {
+        #inner_time, #inner_date {
             text-align: right;
         }
 
         @media(max-width: 768px) {
-            #customTooltip { padding: 0rem; }
-            #showInfo { font-size: 1rem; }
-            #inner_status{ font-size: 1rem; }
+            #customTooltip { padding: 0.3rem; width: 90%; max-height: 100%;}
+            #showInfo { font-size: 0.8rem; }
+            #inner_status{ font-size: 1rem; top: 0.1rem;}
             .Tooltop-Bottom { font-size: 0.7rem; }
+            .Tooltop-Top { margin-top: 0rem; }
+            #closeTooltip { right: 0.3rem; }
+            #level { margin: 0rem; }
         }
       
     </style>
@@ -521,7 +522,7 @@
               -->
 
 
-    <!-- Popup Panel -->
+    
 
     <!-- Map -->
 
@@ -580,6 +581,8 @@
 
         
     </div> -->
+        
+    <!-- Popup Panel -->
 
         <div id="customTooltip">
             <button id="closeTooltip">
@@ -806,7 +809,7 @@
                     document.getElementById('inner_time').innerHTML = point.time_every_min.split(" ")[1].slice(0, 5);
 
                     let c = getColorByValue(point.level, point.status, point.available_spaces); // Assuming getColorByValue is defined elsewhere
-                    document.getElementById('inner_status').innerHTML = `<div style='display: flex;font-size:1.5rem; '><div style='color: ${c}'>⬤</div></div>`;
+                    document.getElementById('inner_status').innerHTML = `<div id='inner_status'; '><div style='color: ${c}'>⬤</div></div>`;
 
                     // Show the custom tooltip
                     document.getElementById('customTooltip').style.display = 'block';
