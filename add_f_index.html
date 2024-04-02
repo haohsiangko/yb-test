@@ -24,7 +24,7 @@
             font-optical-sizing: auto;
         }
 
-        #mapid {
+        #mapid2 {
             width: 100%;
             height: 90vh;
         }
@@ -541,7 +541,7 @@
 
 <body>
 
-    <div id="mapid">
+    <div id="mapid2">
         <div id="countDisplay" style="display: none;"></div>
         <div class="top-legend">
             <div class="legend-group">
@@ -651,7 +651,7 @@
     <!-- Main Map JS  -->
 
     <script> // Map indepth JS
-        var mymap = L.map('mapid').setView([25.0430, 121.5584], 13);
+        var mymap = L.map('mapid2').setView([25.0430, 121.5584], 13);
 
         //https://api.mapbox.com/styles/v1/trdesigners/clu0ykowm024c01pteflt5emt/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoidHJkZXNpZ25lcnMiLCJhIjoiY2wzMnZrb3NlMGg1bzNkbjMwMXcyNGdqaSJ9.Lu_l-YQvvcLymn7fRLD5LA
         //'https://api.mapbox.com/styles/v1/trdesigners/clrhefwmh006901rb44ho8fzy/tiles/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJkZXNpZ25lcnMiLCJhIjoiY2wzMnZrb3NlMGg1bzNkbjMwMXcyNGdqaSJ9.Lu_l-YQvvcLymn7fRLD5LA'
@@ -1124,7 +1124,7 @@
         function resizeMap() {
             var windowHeight = window.innerHeight; // 獲取當前視窗的高度
             var newHeight = windowHeight * 0.8; // 計算地圖高度為視窗高度的80%
-            document.getElementById('mapid').style.height = newHeight + 'px'; // 設定地圖容器的高度
+            document.getElementById('mapid2').style.height = newHeight + 'px'; // 設定地圖容器的高度
             console.log("resize map")
         }
 
